@@ -1,6 +1,7 @@
 ziya
     by Fernand Galiana
     ziya.rubyforge.org
+    git://github.com/derailed/ziya.git
 
 == RELEASES
 
@@ -8,7 +9,7 @@ ziya
   2.0.1 - Additional support for 5.02 + Added donut chart from 5.03
   2.0.2 - Changed logging required to 0.9.X - Update to xml/swf 5.0.4
   2.0.3 - README file update - Thanks to Paul James !
-  2.0.4 - Fixed missing encoding on composite urls
+  2.0.4 - Fixed missing encoding on composite urls - published gem on github
 
 == DESCRIPTION:
 
@@ -25,6 +26,8 @@ managers will love you for it !!
 	Video            : http://www.youtube.com/watch?v=axIMmMHdXzo ( Out of date but you'll get the basics... )
 	Documentation    : http://ziya.liquidrail.com/docs
 	Forum            : http://groups.google.com/group/ziya-plugin
+	Repositories     : http://rubyforge.org/projects/ziya 
+	                   git://github.com/derailed/ziya.git
 
 
 == FEATURES:
@@ -50,6 +53,27 @@ managers will love you for it !!
 
 *  Theme support. You can change the appearance and behavior of any charts by introducing
    new themes under the public/charts/themes directory.
+
+== REQUIREMENTS:
+
+  ZiYa depends on the logging gem version > 0.9.0  
+
+== INSTALL:
+  
+  On rubyforge
+  
+  sudo gem install ziya
+  
+  or github
+  
+  sudo gem install derailed-ziya
+  
+  cd to your application directory and issue the following command
+  
+  > ziyafy
+  
+  This will copy the necessary themes and flash files to run ziya in your application 
+  public/charts directory.
       
 == SYNOPSIS:
   
@@ -191,21 +215,6 @@ managers will love you for it !!
                 radius:       5
                 fill_alpha:  80
   
-== REQUIREMENTS:
-
-  ZiYa depends on the logging gem version > 0.9.0  
-
-== INSTALL:
-
-  sudo gem install ziya
-  
-  cd to your application directory and issue the following command
-  
-  > ziyafy
-  
-  This will copy the necessary themes and flash files to run ziya in your application 
-  public/charts directory.
-
 == LICENSE:
 
 (The MIT License)
