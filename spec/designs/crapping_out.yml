@@ -1,0 +1,8 @@
+<%= gauge :base %>
+
+<%= dial :circle, :circle_1 %>
+    x:             999
+    y:             999
+    radius:         30
+    fill_alpha:      0
+    line_thickness:  5

@@ -1,0 +1,11 @@
+<%= gauge :base %> 
+  <%= dial :circle, :circle %>
+      x:               200
+      y:                75
+      radius:           30
+      fill_alpha:        0
+      fill_color:      <%= colorize %>
+      line_thickness:    5    
+    
+  # call up to helper to draw another circle
+  <%= make_circle( 10, 10, 200 ) %>

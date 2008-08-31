@@ -1,0 +1,5 @@
+--- !ruby/object:Ziya::Gauges::Base
+components: !omap
+  - :circle_1: !ruby/object:Ziya::Gauges::Support::Circle
+      x: 200
+      y: 100

@@ -1,0 +1,43 @@
+<%= gauge :base %>  
+  <%= dial :circle, :circle_2 %>
+      x:      200
+      y:       75
+      radius:  30
+      start:    0
+      end:     90   
+
+  <%= dial :circle, :circle_1 %>
+      x:             200
+      y:              75
+      radius:         30
+      fill_alpha:      0
+      line_thickness:  5    
+        
+  <%= dial :radial_ticks, :ticks %>
+      x:              200
+      y:               75
+      radius:          27
+      length:          10
+      start_angle:      0
+      end_angle:       90
+      ticks:           10
+      thickness:        2
+      color:       555555
+          
+  <%= dial :rotate, :rotation %>
+      x:               200
+      y:                75
+      start:           230
+      span:            160
+      step:              5
+      shadow_alpha:     20
+      shadow_x_offset:   3
+      shadow_y_offset:   3
+      <%= dials %>
+        <%= dial :line, :line %>
+            x1:             200
+            y1:              45
+            x2:             200
+            y2:              52
+            color:       ff3300
+            thickness:        4

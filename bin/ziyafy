@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby            
+require 'optparse'
+require 'ostruct'
+
+require File.expand_path( File.join(File.dirname(__FILE__), '..', 'lib', 'ziya') )
+    
+module Ziya
+  class Ziyafy  
+    # Copy necessary ZiYa components to a ruby web application
+    def initialize( argv=ARGV ) 
+      option_parser = default_option_parser 
+      option_parser.parse!(argv)
+      puts "Installing ZiYa artifacts in `#{options.public_dir}"        
+      copy_artifacts
+    end                  
+          
+    # copies ziya artifacts to public app directory
+    def copy_artifacts
+      source_dir = File.expand_path( File.join( File.dirname(__FILE__), %w[.. charts]) )
+      FileUtils.cp_r( source_dir, options.public_dir )
+      source_dir = File.expand_path( File.join( File.dirname(__FILE__), %w[.. gauges]) )
+      FileUtils.cp_r( source_dir, options.public_dir )      
+    end
+    
+    # access the options
+    def options  #:nodoc:
+      if not @options then      
+        @options = OpenStruct.new 
+        # Unless specified copy artifacts to the public directory
+        @options.public_dir = File.join( Dir.pwd, %w[public] )
+      end
+      return @options
+    end
+
+    # sets up cmd line args
+    def default_option_parser #:nodoc:
+      OptionParser.new do |op|
+        op.separator ""
+        op.separator "Ziyafy options"
+
+        op.on( "-p", "--public_dir FILE", "The location of the public app directory." ) do |dir|
+          options.public_dir = dir
+        end
+        op.separator ""
+      end
+    end   
+  end
+end  
+
+Ziya::Ziyafy.new(ARGV)
+
+
+    

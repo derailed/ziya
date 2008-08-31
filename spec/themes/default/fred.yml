@@ -1,0 +1,6 @@
+<%= chart :line %> 
+  <%=component :axis_category %>
+    size:   200
+    color:  ffffff
+    bold:   false
+    alpha:  1
