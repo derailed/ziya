@@ -25,7 +25,7 @@ PROJ.svn            = 'ziya'
 PROJ.rcov_threshold = 90.0
 PROJ.executables    = ['ziyafy']
 
-PROJ.exclude        << %w[.DS_Store$ .swo$ .swp$]
+PROJ.exclude        << %w[.DS_Store$ .svn$ .swo$ .swp$]
 PROJ.tests          = FileList['test/**/test_*.rb']   
 PROJ.annotation_tags << 'BOZO'
 
