@@ -30,7 +30,7 @@ module Ziya::Components
   #  
   class ChartRect < Base
     has_attribute :x, :y, :width, :height, :positive_color, :negative_color,
-                  :positive_alpha, :negative_alpha, 
+                  :positive_alpha, :negative_alpha, :hide,
                   :shadow, :bevel, :blur, :glow,
                   :corner_tl, :corner_tr, :corner_bl, :corner_br
   end

@@ -1,17 +1,14 @@
-# -----------------------------------------------------------------------------
 # Generates necessary html flash tag to support ZiYa
 #
-# TODO !! Rewrite to use content tag block instead...
+# TODO -- Rewrite to use content tag block instead...
 #
 # Author: Fernand Galiana
-# -----------------------------------------------------------------------------
 require 'cgi'
 require 'erb'
 
 module Ziya
   module Helper    
     
-    # -------------------------------------------------------------------------
     # generates a javascript tag to include the js script to create object and
     # embed tags
     def ziya_javascript_include_tag
@@ -55,7 +52,9 @@ module Ziya
       # setup width and height
       setup_movie_size( options )
       
-      xml_swf_path = charts_swf % [options[:swf_path], escape_url(url)]
+      flash_vars   = url ? charts_swf : charts_swf_no_src
+      xml_swf_path = flash_vars % [options[:swf_path], escape_url(url)]
+      xml_swf_path << "&chart_id=#{options[:id]}"
       xml_swf_path << "&timestamp=#{Time.now.to_i}" if options[:cache] == false
       xml_swf_path << "&timeout=#{options[:timeout]}&retry=#{options[:retry]}" if options[:timeout]
       xml_swf_path << "&stage_width=#{options[:width]}&stage_height=#{options[:height]}" if options[:use_stage] == true 
@@ -101,7 +100,6 @@ module Ziya
       JS
     end
     
-    # -------------------------------------------------------------------------
     # generates necessary html tags to display a gauge.  
     def ziya_gauge( url, gauge_options={} )
       options = { :width          => "200",
@@ -121,7 +119,6 @@ module Ziya
       generate_old_style_flash_tag( url, gauges_swf, options )
     end
         
-    # -------------------------------------------------------------------------------------
     # generates neccessary html tags to display a chart.
     def ziya_chart( url, chart_options = {} )
       options = { :width          => "400",
@@ -138,7 +135,8 @@ module Ziya
                   :use_stage      => false
                 }.merge!(chart_options)
     
-      generate_flash_tag( url, charts_swf, "charts.swf", options )
+      flash_vars = url ? charts_swf : charts_swf_no_src
+      generate_flash_tag( url, flash_vars, "charts.swf", options )
     end   
         
     # flash chart library path
@@ -150,19 +148,20 @@ module Ziya
     # private                               
 
       # Const accessors...
-      def mime()          "application/x-shockwave-flash"; end
-      def composite_url() "%s/charts.swf?library_path=%s/charts_library&xml_source=%s" end
-      def charts_swf()    "library_path=%s/charts_library&xml_source=%s"; end      
-      def plugin_url()    "http://www.macromedia.com/go/getflashplayer"; end
-      def gauges_swf()    "%s/gauge.swf?xml_source=%s"; end              
-      def gauge_path()    "/gauges"; end
-      def chart_path()    "/charts"; end       
-      def class_id()      "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" end
-      def codebase()      "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0"; end
+      def mime()              "application/x-shockwave-flash"; end
+      def composite_url()     "%s/charts.swf?library_path=%s/charts_library&xml_source=%s" end
+      def charts_swf_no_src() "library_path=%s/charts_library"; end      
+      def charts_swf()        "#{charts_swf_no_src}&xml_source=%s"; end      
+      def plugin_url()        "http://www.macromedia.com/go/getflashplayer"; end
+      def gauges_swf()        "%s/gauge.swf?xml_source=%s"; end              
+      def gauge_path()        "/gauges"; end
+      def chart_path()        "/charts"; end       
+      def class_id()          "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" end
+      def codebase()          "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0"; end
 
       # generates swf path
       def gen_swf_path( path_directive, swf_dir, url )
-        path_directive % [swf_dir, escape_url( url )]
+        path_directive % [swf_dir, escape_url( url )]        
       end
 
       def generate_old_style_flash_tag( url, swf_path, options )
@@ -230,69 +229,45 @@ module Ziya
         xml_swf_path << "&timeout=#{options[:timeout]}" if options[:timeout]
         xml_swf_path << "&stage_width=#{options[:width]}&stage_height=#{options[:height]}" if options[:use_stage] == true 
         
-        # if options[:tag_type] == "object"
-          tags = <<-TAGS
-          <object codebase="#{codebase}" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="#{options[:id]}" height="#{options[:height]}" width="#{options[:width]}">
-            <param name="scale"             value="noscale">
-            <param name="salign"            value="#{options[:salign]}">            
-            <param name="bgcolor"           value="#{options[:bgcolor]}">
-            <param name="wmode"             value="#{options[:wmode]}">                                  
-            <param name="movie"             value="#{options[:swf_path]}/#{swf_file}">            
-            <param name="FlashVars"         value="#{xml_swf_path}&chart_id=#{options[:id]}">
-            <param name="menu"              value="true">
-            <param name="allowFullScreen"   value="true">
-            <param name="allowScriptAccess" value="sameDomain">            
-            <param name="quality"           value="high">
-            <param name="play"              value="true">                        
-            <param name="devicefont"        value="false">
-              <embed scale="noscale" 
-                allowfullscreen="true" 
-                allowscriptaccess="sameDomain" 
-                bgcolor="#{options[:bgcolor]}" 
-                devicefont="false" 
-                flashvars="#{xml_swf_path}" 
-                menu="true" 
-                name="#{options[:id]}" 
-                play="true" 
-                pluginspage="http://www.macromedia.com/go/getflashplayer" 
-                quality="high" 
-                salign="#{options[:salign]}" 
-                src="#{options[:swf_path]}/#{swf_file}" 
-                type="application/x-shockwave-flash" 
-                wmode="#{options[:wmode]}" 
-                align="#{options[:align]}" 
-                height="#{options[:height]}" 
-                width="#{options[:width]}"/>            
+        tags = <<-TAGS
+        <object codebase="#{codebase}" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="#{options[:id]}" height="#{options[:height]}" width="#{options[:width]}">
+          <param name="scale"             value="noscale">
+          <param name="salign"            value="#{options[:salign]}">            
+          <param name="bgcolor"           value="#{options[:bgcolor]}">
+          <param name="wmode"             value="#{options[:wmode]}">                                  
+          <param name="movie"             value="#{options[:swf_path]}/#{swf_file}">
+          <param name="Flashvars"         value="#{xml_swf_path}&chart_id=#{options[:id]}">
+          <param name="menu"              value="true">
+          <param name="allowFullScreen"   value="true">
+          <param name="allowScriptAccess" value="sameDomain">            
+          <param name="quality"           value="high">
+          <param name="play"              value="true">                        
+          <param name="devicefont"        value="false">
+            <embed scale="noscale" 
+              allowfullscreen   = "true" 
+              allowscriptaccess = "sameDomain" 
+              bgcolor           = "#{options[:bgcolor]}" 
+              devicefont        = "false" 
+              flashvars         = "#{xml_swf_path}&chart_id=#{options[:id]}" 
+              menu              = "true" 
+              name              = "#{options[:id]}" 
+              play              = "true" 
+              pluginspage       = "http://www.macromedia.com/go/getflashplayer" 
+              quality           = "high" 
+              salign            = "#{options[:salign]}" 
+              src               = "#{options[:swf_path]}/#{swf_file}" 
+              type              = "application/x-shockwave-flash" 
+              wmode             = "#{options[:wmode]}" 
+              align             = "#{options[:align]}" 
+              height            = "#{options[:height]}" 
+              width             = "#{options[:width]}"/>            
          </object>        
         TAGS
-      # else
-       #    tags = <<-TAGS
-       #      <embed scale="noscale" 
-       #        allowfullscreen="true" 
-       #        allowscriptaccess="sameDomain" 
-       #        bgcolor="#{options[:bgcolor]}" 
-       #        devicefont="false" 
-       #        flashvars="#{xml_swf_path}" 
-       #        menu="true" 
-       #        name="#{options[:id]}" 
-       #        play="true" 
-       #        pluginspage="http://www.macromedia.com/go/getflashplayer" 
-       #        quality="high" 
-       #        salign="#{options[:salign]}" 
-       #        src="#{options[:swf_path]}/#{swf_file}" 
-       #        type="application/x-shockwave-flash" 
-       #        wmode="#{options[:wmode]}" 
-       #        align="#{options[:align]}" 
-       #        height="#{options[:height]}" 
-       #        width="#{options[:width]}"/>
-       #    TAGS
-       # end 
-       tags
       end
               
       # escape url    
       def escape_url( url )
-        CGI.escape( url.gsub( /&amp;/, '&' ) )
+        url ? CGI.escape( url.gsub( /&amp;/, '&' ) ) : url
       end
     
       # setup up wmode

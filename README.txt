@@ -10,7 +10,9 @@ ziya
   2.0.2 - Changed logging required to 0.9.X - Update to xml/swf 5.0.4
   2.0.3 - README file update - Thanks to Paul James !
   2.0.4 - Fixed missing encoding on composite urls - published gem on github
-
+  2.0.5 - Fixed merb app support issue
+  2.0.6 - Updates to support xml/swf 5.0.5
+  
 == DESCRIPTION:
 
 ZiYa allows you to easily display graphs in your ruby based applications by leveraging

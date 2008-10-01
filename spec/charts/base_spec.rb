@@ -82,6 +82,12 @@ describe Ziya::Charts::Base do
       @chart.add( :series, "test", [ {:value => 10, :glow => "glow1" }, { :value => 20, :blur => "blur2" } ] )
       @chart.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><chart><chart_data><row><null/><string>dog</string><string>cat</string></row><row><string>test</string><number glow=\"glow1\">10</number><number blur=\"blur2\">20</number></row></chart_data></chart>"
     end
+
+    it "should support adding an image to a series" do
+      @chart.add( :axis_category_text, %w[dog cat] )
+      @chart.add( :series, "test", [ 10, 20 ], "some_url" )
+      @chart.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><chart><chart_data><row><null/><string>dog</string><string>cat</string></row><row url=\"some_url\"><string>test</string><number>10</number><number>20</number></row></chart_data></chart>"
+    end
     
     it "should error if a series is defined but no axis_category is specified" do
       @chart.add( :series, "test", [10,20] )      

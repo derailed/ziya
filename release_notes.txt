@@ -1,0 +1,10 @@
+2.0.0 - Gem release - Update to xml/swf 5.0.2 added xml/gauge 1.6 
+2.0.1 - Update for xml/swf 5.0.3
+2.0.2 - Changed logging required to 0.9.X - Update to xml/swf 5.0.4
+2.0.3 - README file update - Thanks to Paul James !
+2.0.4 - Fixed missing encoding on composite urls - published gem on github
+2.0.5 - Fixed merb app support issue
+2.0.6 - Updates to support xml/swf 5.0.5 
+  Fixed configuration with stacked 3d area charts
+  Added support for nil url in ziya_chart_helper - This allows to get a js callback when the
+  chart loads and populate the charts xml via javascript

@@ -13,9 +13,9 @@ module Ziya::Components
   # for additional documentation, examples and futher detail.
   #  
   class ChartPref < Base  
-    has_attribute :line_thickness, :point_shape, :point_size, :fill_shape,
+    has_attribute :line_thickness, :point_shape, :point_size, :fill_shape, :connect, :tip,
                   :type, :bull_color, :bear_color,
-                  :reverse, :drag, :min_x, :min_y, :max_x, :max_y,
+                  :drag, :min_x, :min_y, :max_x, :max_y,
                   :trend_thickness, :trend_alpha, :line_alpha, :rotation_x,
                   :rotation_y, :grid, :select, :empty_center
   end

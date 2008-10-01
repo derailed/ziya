@@ -56,7 +56,7 @@ module Ziya::Charts
       @options     = {}
       @series_desc = []
       @theme       = default_theme
-      @render_mode = Base.all_styles
+      @render_mode = Base.mode_reset
       initialize_components
       load_helpers( Ziya.helpers_dir ) if Ziya.helpers_dir
     end
@@ -67,10 +67,10 @@ module Ziya::Charts
     end
     
     # don't render stylesheets just gen code for chart stylesheet and data
-    def self.data_only() 1; end
+    def self.mode_data() 1; end
     
     # renders everything
-    def self.all_styles() 0; end
+    def self.mode_reset() 0; end
     
     # -------------------------------------------------------------------------
     # Default ZiYa theme
@@ -84,7 +84,12 @@ module Ziya::Charts
       Dir.foreach(helper_dir) do |helper_file| 
         next unless helper_file =~ /^([a-z][a-z_]*_helper).rb$/
         Ziya.logger.debug( ">>> ZiYa loading custom helper `#{$1}" )        
-        require_dependency File.join(helper_dir, $1)        
+        # check rails env for autoloader ?
+        if defined?(RAILS_ROOT) 
+          require_dependency File.join(helper_dir, $1) 
+        else
+          require File.join(helper_dir, $1)
+        end
         helper_module_name = "Ziya::" + $1.gsub(/(^|_)(.)/) { $2.upcase }        
         # helper_module_name = $1.to_s.gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(^|_)(.)/) { $2.upcase }
         # if Ziya::Helpers.const_defined?(helper_module_name)
@@ -100,7 +105,8 @@ module Ziya::Charts
     # Example:
     #   my_chart = Ziya::Charts::Bar.new
     #   my_chart.add( :axis_category_text, ['2004', '2005', '2006'] ) 
-    #   my_chart.add( :series, 'series A', [ 10, 20, 30], [ '10 dogs', '20 cats', '30 rats'] )
+    #   my_chart.add( :axis_category_label, [ '10 dogs', '20 cats', '30 rats'] )
+    #   my_chart.add( :series, 'series A', [ 10, 20, 30] )
     #   my_chart.add( :axis_value_label, [ 'my dogs', 'my cats', 'my rats'] )
     #   my_chart.add( :user_data, :mykey, "Fred" )
     #
@@ -157,15 +163,19 @@ module Ziya::Charts
           raise ArgumentError, "Must specify an array of values" if values.empty?
           @options[directive] = values
         when :series
+          series = {}
           legend = args.first.is_a?(String) ? args.shift : ""
           if args.first.is_a?( Array )
             points = args.shift || []
             raise ArgumentError, "Must specify an array of data points" if points.empty?
             points.insert( 0, legend )
-            @series_desc << points
+            series[:points] = points
           else
             raise ArgumentError, "Must specify an array of data points"
           end
+          url = args.shift          
+          series[:url] = url if url
+          @series_desc << series
         when :user_data
           key = args.first.is_a?(Symbol) ? args.shift : ""
           raise ArgumentError, "Must specify a key" if key.to_s.empty?
@@ -355,50 +365,48 @@ module Ziya::Charts
     # ------------------------------------------------------------------------
     # generates chart data row
     # TODO Validate options !!
-    def gen_row_data( value, opts=nil )
+    def gen_row_data( value, opts=nil, xml=@xml )
       if value.instance_of? String
-        gen_string_data( value, opts )
+        gen_string_data( value, opts, xml )
       elsif value.respond_to? :zero?
-        gen_number_data( value, opts )
+        gen_number_data( value, opts, xml )
       end        
     end
     
     # -------------------------------------------------------------------------
     # generates string chart_value
-    def gen_string_data( value, opts )
-      if opts
-        @xml.string( opts ) { |x| x.text!( value ) }
-      else
-        @xml.string( value )
-      end
+    def gen_string_data( value, opts, xml )
+      opts ? xml.string( opts ) { |x| x.text!( value ) } : xml.string( value )
     end
     
     # -------------------------------------------------------------------------
     # generates number chart_value
-    def gen_number_data( value, opts )
-      if opts
-        @xml.number( opts ) { |x| x.text!( value.to_s ) }
-      else
-        @xml.number( value )
-      end
+    def gen_number_data( value, opts, xml )
+      opts ? xml.number( opts ) { |x| x.text!( value.to_s ) } : xml.number( value )
     end
     
     # -------------------------------------------------------------------------
     # generates chart data points    
     # BOZO !! Check args on hash
     def gen_chart_data( series )
-      @xml.row do
-        series.each do |row|      
+      block = lambda {
+        series[:points].each do |row|      
           if row.nil?
             @xml.null 
           elsif row.instance_of? Hash
             value = row.delete( :value )
-            gen_row_data( value, row )
+            gen_row_data( value, row, @xml )
           else
-            gen_row_data( row )
+            gen_row_data( row, nil, @xml )
           end
         end
-      end        
+      }
+      
+      if series[:url]
+        @xml.row( :url => series[:url], &block )
+      else
+        @xml.row( &block )
+      end
     end
     
     # -------------------------------------------------------------------------
@@ -451,7 +459,7 @@ module Ziya::Charts
     # -------------------------------------------------------------------------
     # Check if we should do the all monty or just render the instance styles
     def render_parents?      
-      (@render_mode == Base.all_styles)
+      (@render_mode == Base.mode_reset)
     end
     
     # -------------------------------------------------------------------------

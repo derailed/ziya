@@ -25,7 +25,7 @@ PROJ.svn            = 'ziya'
 PROJ.rcov_threshold = 90.0
 PROJ.executables    = ['ziyafy']
 
-PROJ.exclude        << %w[.DS_Store$ .svn$ .swo$ .swp$]
+PROJ.exclude        << %w[.DS_Store$ .swo$ .swp$]
 PROJ.tests          = FileList['test/**/test_*.rb']   
 PROJ.annotation_tags << 'BOZO'
 
@@ -41,4 +41,4 @@ end
 
 task 'gem:package' => 'manifest:assert'
 
-depend_on "logging", "~> 0.9.0"
+depend_on "logging", ">= 0.9.0"
