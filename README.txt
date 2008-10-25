@@ -17,6 +17,10 @@
           - added draw button support
           - added chart_note to annotate a chart
           - added tooltip chart support
+  2.0.8 - Patches to xml/swf/5.0.7 - scroller handle fixe + Stoppped_Scolling js callback 
+          - added support for flash_to_javascript callbacks
+          - added support ids in composite charts
+          - various bug fixes 
   
 == DESCRIPTION:
 
