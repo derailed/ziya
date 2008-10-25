@@ -17,8 +17,8 @@ PROJ.url            = 'http://ziya.rubyforge.org'
 PROJ.rubyforge_name = 'ziya'            
 PROJ.description    = "Easily add charting to your rails/merb applications"
 PROJ.spec_opts      << '--color'
-PROJ.rcov_dir       = ENV['CC_BUILD_ARTIFACTS']  ? "#{ENV['CC_BUILD_ARTIFACTS']}/test_coverage" : 'coverage'  
-PROJ.rdoc_dir       = ENV['CC_BUILD_ARTIFACTS']  ? "#{ENV['CC_BUILD_ARTIFACTS']}/api_docs" : 'docs'  
+PROJ.rcov_dir       = 'coverage'  
+PROJ.rdoc_dir       = 'docs'  
 PROJ.ruby_opts      = %w[-W0]
 PROJ.version        = ::Ziya::Version.version
 PROJ.svn            = 'ziya'

@@ -10,8 +10,7 @@ module Ziya::Components
   # See http://www.maani.us/xml_charts/index.php?menu=Reference&submenu=link
   # for additional documentation, examples and futher detail.
   class Area < Base  
-    has_attribute :x, :y, :width, :height, :url, :priority, :target, :text,
-                  :font, :bold, :size, :color, :background_color, :alpha,
-                  :timeout, :retry, :spinning_wheel           
+    has_attribute :x, :y, :width, :height, :url, :priority, :target, :tooltip,
+                  :timeout, :retry, :spinning_wheel
   end
 end

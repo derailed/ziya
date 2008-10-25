@@ -26,6 +26,12 @@ describe Ziya::Charts::Base do
       StackedBar 
       StackedColumn 
       StackedThreedColumn
+      StackedThreedArea
+      AreaThreed
+      Donut
+      ImagePie
+      ImageColumn
+      Custom
     ]
   end
     
@@ -40,6 +46,8 @@ describe Ziya::Charts::Base do
           else
             chart.type.gsub(/ /, '' ).should == "3d" + match[1].downcase
           end
+        elsif type == "Custom"
+          chart.type.should be_empty
         else
           chart.type.gsub(/ /, '' ).should == type.downcase unless type == "Mixed"
         end

@@ -26,9 +26,9 @@ module Ziya::Components
     # -------------------------------------------------------------------------
     # Dump has_attribute into xml element
     def flatten( xml, composite_urls=nil )
-      if components
+      if components or composite_urls
         xml.draw do 
-          components.each { |comp| comp.flatten( xml ) }
+          components.each { |comp| comp.flatten( xml ) } if components
           gen_composites( xml, composite_urls ) if composite_urls
         end
       end
@@ -37,10 +37,8 @@ module Ziya::Components
     # -------------------------------------------------------------------------
     # Generates Draw component for composite charts
     def gen_composites( xml, composite_urls )
-      # chart_path = chart_path
-      for url in composite_urls do
-        # xml.image( :url => composite_url % [ chart_path, chart_path, url] )
-        xml.image( :url => gen_composite_path( chart_path, url ) )
+      composite_urls.each_pair do |id, url|
+        xml.image( :url => gen_composite_path( chart_path, url, id ) )
       end
     end
   end

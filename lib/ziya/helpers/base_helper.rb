@@ -10,11 +10,11 @@ module Ziya::Helpers
     # generates a swf chart path from the given url. Used as helper to embed a chart
     # within a chart
     # ==== Example
-    #   <%= chart_url( chart_1_path ) %>
+    #   <%= chart_url( chart_1_path, "fred" ) %>
     #
-    #  => /charts/charts.swf?library_path=/charts/charts_library&xml_source=http://fred/load_chart_1.xml
-    def chart_url( url, swf_chart_dir="/charts" )
-      gen_composite_path( swf_chart_dir, url )
+    #  => /charts/charts.swf?library_path=/charts/charts_library&xml_source=http://fred/load_chart_1.xml&chart_id=fred
+    def chart_url( url, swf_chart_dir="/charts", id=nil )
+      gen_composite_path( swf_chart_dir, url, id )
     end
     
     # indent yaml content vy multiples of 2 spaces

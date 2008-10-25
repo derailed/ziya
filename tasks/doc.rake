@@ -1,6 +1,8 @@
 # $Id$
-
 require 'rake/rdoctask'
+gem 'darkfish-rdoc'
+require 'darkfish-rdoc'
+
 
 namespace :doc do
 
@@ -12,17 +14,20 @@ namespace :doc do
     incl = Regexp.new(PROJ.rdoc_include.join('|'))
     excl = Regexp.new(PROJ.rdoc_exclude.join('|'))
     files = PROJ.files.find_all do |fn|
-              case fn
-              when excl; false
-              when incl; true
-              else false end
-            end
+      case fn
+      when excl; false
+      when incl; true
+      else false end
+    end
     rd.rdoc_files.push(*files)
 
-    title = "#{PROJ.name}-#{PROJ.version} Documentation"
+    title = "#{PROJ.version} documentation"
     title = "#{PROJ.rubyforge_name}'s " + title if PROJ.rubyforge_name != title
 
     rd.options << "-t #{title}"
+    rd.options << "-SHN"
+    rd.options << "-f"
+    rd.options << "darkfish"
     rd.options.concat(PROJ.rdoc_opts)
   end
 

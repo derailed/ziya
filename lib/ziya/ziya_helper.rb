@@ -11,17 +11,22 @@ module Ziya
     
     # generates a javascript tag to include the js script to create object and
     # embed tags
-    def ziya_javascript_include_tag
+    def ziya_javascript_include_tag( opts={} )
+      options = { :swf_path   => chart_path,
+                  :major_vers => 9,
+                  :minor_vers => 0,
+                  :req_vers   => 45 }.merge!( opts )
+      
       js = <<-JS
         <script language="javascript" type="text/javascript">
           AC_FL_RunContent = 0;
           DetectFlashVer = 0;
         </script>
-        <script src="/charts/AC_RunActiveContent.js" language="javascript"></script>
+        <script src="#{options[:swf_path]}/AC_RunActiveContent.js" language="javascript"></script>
         <script language="javascript" type="text/javascript">
-          var requiredMajorVersion = 9;
-          var requiredMinorVersion = 0;
-          var requiredRevision = 45;
+          var requiredMajorVersion = #{options[:major_vers]};
+          var requiredMinorVersion = #{options[:minor_vers]};
+          var requiredRevision = #{options[:req_vers]};
         </script>
        JS
     end
@@ -52,7 +57,7 @@ module Ziya
       # setup width and height
       setup_movie_size( options )
       
-      flash_vars   = url ? charts_swf : charts_swf_no_src
+      flash_vars   = url ? charts_swf : charts_swf_base
       xml_swf_path = flash_vars % [options[:swf_path], escape_url(url)]
       xml_swf_path << "&chart_id=#{options[:id]}"
       xml_swf_path << "&timestamp=#{Time.now.to_i}" if options[:cache] == false
@@ -135,29 +140,37 @@ module Ziya
                   :use_stage      => false
                 }.merge!(chart_options)
     
-      flash_vars = url ? charts_swf : charts_swf_no_src
+      flash_vars = url ? charts_swf : charts_swf_base
       generate_flash_tag( url, flash_vars, "charts.swf", options )
     end   
         
     # flash chart library path
-    def gen_composite_path( swf_chart_dir, url )
-      composite_url % [swf_chart_dir, swf_chart_dir, escape_url( url )] 
+    def gen_composite_path( swf_chart_dir, url, chart_id=null )
+      buff = ""
+      if url
+        buff = composite_url % [swf_chart_dir, swf_chart_dir, escape_url( url )] 
+      else
+        buff = composite_base_url % [swf_chart_dir, swf_chart_dir]
+      end
+      buff << "&chart_id=#{chart_id}" if chart_id
+      buff
     end
     
     # =========================================================================
     # private                               
 
       # Const accessors...
-      def mime()              "application/x-shockwave-flash"; end
-      def composite_url()     "%s/charts.swf?library_path=%s/charts_library&xml_source=%s" end
-      def charts_swf_no_src() "library_path=%s/charts_library"; end      
-      def charts_swf()        "#{charts_swf_no_src}&xml_source=%s"; end      
-      def plugin_url()        "http://www.macromedia.com/go/getflashplayer"; end
-      def gauges_swf()        "%s/gauge.swf?xml_source=%s"; end              
-      def gauge_path()        "/gauges"; end
-      def chart_path()        "/charts"; end       
-      def class_id()          "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" end
-      def codebase()          "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0"; end
+      def mime()               "application/x-shockwave-flash"; end
+      def composite_base_url() "%s/charts.swf?library_path=%s/charts_library" end        
+      def composite_url()      "#{composite_base_url}&xml_source=%s" end
+      def charts_swf_base()    "library_path=%s/charts_library"; end      
+      def charts_swf()         "#{charts_swf_base}&xml_source=%s"; end      
+      def plugin_url()         "http://www.macromedia.com/go/getflashplayer"; end
+      def gauges_swf()         "%s/gauge.swf?xml_source=%s"; end              
+      def gauge_path()         "/gauges"; end
+      def chart_path()         "/charts"; end       
+      def class_id()           "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" end
+      def codebase()           "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0"; end
 
       # generates swf path
       def gen_swf_path( path_directive, swf_dir, url )

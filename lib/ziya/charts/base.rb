@@ -5,6 +5,8 @@
 #
 # TODO !! Match helpers with chart class name
 # TODO !! Add accessor for specifying refresh look and data links on comps
+# TODO Figure out the equiv require_dep for merb if any ??
+# TODO Refact and clean up. 
 #
 # Author:: Fernand Galiana
 # Date::   Dec 15th, 2006
@@ -12,29 +14,47 @@
 require 'ziya/helpers/base_helper'
 require 'yaml'
 
-# TODO Figure out the equiv require_dep for merb if any ??
-# TODO Refact and clean up. 
 module Ziya::Charts
-  # The mother ship of all charts. This class figures out how to generate the 
-  # correct xml to render the chart on the client side. This class handles loading
-  # style sheets and chart helper for the helper directory specified during 
-  # initialization.
+  # The mother ship of all charts. This abstract class figures out how to generate the 
+  # correct xml to render the chart on the client side. It handles loading the look 
+  # and feel via associated stylesheets. In order to customize the chart look and feel,
+  # you must create a theme directory in your application public/charts/themes dir. And
+  # reference it via the #add method using the :theme directive.
   class Base
-    # blee blee
     include Ziya::Helpers::BaseHelper
     
     # =========================================================================                
     protected      
       # defines the various chart components
       def self.declare_components # :nodoc:
-        @components = [
-          :axis_category, :axis_ticks, :axis_value, 
-          :chart_rect, :chart_border, :chart_grid_h, :chart_grid_v,
-          :chart_transition, :chart_label, :chart_guide, :legend,
-          :filter, :draw, 
-          :series_color, :series, :series_explode, 
-          :chart_pref, :scroll,
-          :update, :link_data, :link, :context_menu]                              
+        @components = 
+        [
+          :axis_category, 
+          :axis_ticks, 
+          :axis_value, 
+          :chart_rect, 
+          :chart_border, 
+          :chart_grid_h, 
+          :chart_grid_v,
+          :chart_note, 
+          :tooltip,
+          :chart_transition, 
+          :chart_label, 
+          :chart_guide, 
+          :legend,
+          :filter, 
+          :flash_to_javascript,
+          :draw, 
+          :series_color, 
+          :series, 
+          :series_explode, 
+          :chart_pref, 
+          :scroll,
+          :update, 
+          :link_data, 
+          :link, 
+          :context_menu
+        ]                              
         @components.each { |a| attr_accessor a }      
       end    
       declare_components
@@ -46,15 +66,16 @@ module Ziya::Charts
     attr_reader   :type # :nodoc:
 
     # create a new chart.
-    # <tt>:license</tt>::  the XML/SWF charts license
-    # <tt>:chart_id</tt>:: the name of the chart style sheet.
+    # <tt>license</tt> -- the XML/SWF charts license
+    # <tt>chart_id</tt> -- the name of the chart style sheet.
     # NOTE: If chart_id is specified the framework will attempt to load the chart styles
     # from public/themes/theme_name/chart_id.yml 
-    def initialize( license=nil, chart_id=nil ) 
+    def initialize( license=nil, chart_id=nil ) # :nodoc:
       @id          = chart_id
       @license     = license
       @options     = {}
       @series_desc = []
+      @annotations = []
       @theme       = default_theme
       @render_mode = Base.mode_reset
       initialize_components
@@ -66,20 +87,22 @@ module Ziya::Charts
       @components
     end
     
-    # don't render stylesheets just gen code for chart stylesheet and data
-    def self.mode_data() 1; end
+    # don't load stylesheets just gen code for chart..
+    def self.mode_data() #:nodoc:
+      1 
+    end 
     
     # renders everything
-    def self.mode_reset() 0; end
+    def self.mode_reset #:nodoc:
+      0 
+    end
     
-    # -------------------------------------------------------------------------
-    # Default ZiYa theme
+    # default ZiYa theme
     def default_theme # :nodoc:
       File.join( Ziya.themes_dir, %w[default] )
     end
     
-    # -------------------------------------------------------------------------
-    # Load up ERB style helpers
+    # load up ERB style helpers
     def load_helpers( helper_dir ) # :nodoc:    
       Dir.foreach(helper_dir) do |helper_file| 
         next unless helper_file =~ /^([a-z][a-z_]*_helper).rb$/
@@ -99,48 +122,46 @@ module Ziya::Charts
       end
     end    
                     
-    # Add chart components such as x and y axis labels, data points and chart 
-    # labels.     
+    # Add chart components to a given chart.  
     # 
-    # Example:
-    #   my_chart = Ziya::Charts::Bar.new
-    #   my_chart.add( :axis_category_text, ['2004', '2005', '2006'] ) 
-    #   my_chart.add( :axis_category_label, [ '10 dogs', '20 cats', '30 rats'] )
-    #   my_chart.add( :series, 'series A', [ 10, 20, 30] )
-    #   my_chart.add( :axis_value_label, [ 'my dogs', 'my cats', 'my rats'] )
-    #   my_chart.add( :user_data, :mykey, "Fred" )
-    #
-    #   This will display a bar chart with x axis ticks my dogs, my cats, my fox and
-    #   y axis values 2004, 2005, 2006. The labels on the bars will read 10 dogs, 
-    #   20 cats, 30 rats
-    #
     # The <tt>args</tt> must contain certain keys for the chart
-    # to be display correctly. The keys are defined as follows:
-    # <tt>:axis_category_text</tt>::   Array of strings representing the x/y axis
-    #                                  ticks dependending on the chart type. This 
-    #                                  value is required.
-    # <tt>:axis_category_label</tt>::  Array of strings representing the x axis
-    #                                  labels. This is supported only for Scatter and Bubble charts.
-    #                                  This value is optional. Specify nil for no label change.    
-    # <tt>:series</tt>::               Specifies the series name and chart data points.
-    #                                  The series name will be used to display chart legends.
-    #                                  You must have at least one of these tag defined.
-    #                                  You may also specify an array of strings to identifies the 
-    #                                  custom labels that will be used on top of the chart 
-    #                                  elements
-    # <tt>:axis_value_label</tt>::     Array of strings representing the ticks on the x/y
-    #                                  axis depending on the chart type. This is symmetrical
-    #                                  to the <tt>axis_category_label</tt> tag for the opposite
-    #                                  chart axis. Specify nil for no label change.
-    # <tt>:user_data</tt>::            Used to make user data available to the ERB templates in
-    #                                  the chart stylesheet yaml file. You must specify a key symbol
-    #                                  and an ad-hoc value. The key will be used with the @options
-    #                                  hash to access the user data.  
-    # <tt>:composites</tt>::           Embeds multiple charts within the given chart via the draw image component.
-    # <tt>:chart_types</tt>::          Specify the chart types per series. This option should                        
-    #                                  only be used with Mixed Charts !!    
-    # <tt>:theme</tt>::                Specify the use of a given theme
+    # to be displayed correctly.
     #
+    # === Directives
+    # * <tt>:axis_category_text</tt> -- Array of strings representing the x/y
+    #   axis ticks dependending on the chart type. This value is required.
+    #   In an x/y axis chart setup the category is the x axis unless the chart is
+    #   a bar chart.
+    # * <tt>:axis_category_label</tt> -- Array of strings representing the x axis
+    #   labels. This is supported only for Scatter and Bubble charts.
+    #   This value is optional. Specify nil for no label change.
+    # * <tt>:series</tt> -- Specifies the series name and chart data points as an array.
+    #   The series name will be used to display chart legends. You must have at least one 
+    #   of these tag defined. The data values may be specified as a straight up array of
+    #   strings or numbers but also as an array of hash representing the data points and 
+    #   their attributes such as note, label, tooltip, effect, etc..
+    # * <tt>:axis_value_label</tt> -- Array of strings representing the ticks on the x/y
+    #   axis depending on the chart type. This is symmetrical to the <tt>axis_category_label</tt> 
+    #   tag for the opposite chart axis. Specify nil for no label change.
+    # * <tt>:user_data</tt>:: -- Used to make user data available to the ERB templates in
+    #   the chart stylesheet yaml file. You must specify a key symbol and an ad-hoc value. 
+    #   The key will be used with the @options hash to access the user data.  
+    # * <tt>:composites</tt> -- Embeds multiple charts within the given chart via the 
+    #   draw image component. You must specify a hash of chart_id/url pairs.
+    # * <tt>:chart_types</tt> -- Specify the chart types per series. This option should                        
+    #   only be used with Mixed Charts !!    
+    # * <tt>:theme</tt> -- Specify the use of a given named theme. The named theme must 
+    #   reside in a directory named equaly under your application public/charts/themes.
+    #
+    # === Examples
+    # Setup the category axis to with 3 ticks namely 2004, 2005, 2006
+    #   my_chart.add( :axis_category_text, ['2004', '2005', '2006'] )
+    #   
+    # Plain old series with integer data points
+    #   my_chart.add( :series, "series A", [ 10, 20, 30] )    
+    # Specifying custom series labels. You may specify the following attributes in the data point
+    # hash : :note, :label, :tooltip and effects such as :shadow, :glow, etc...
+    #   my_chart.add( :series, "series A", [ { :value => 10, :label => 'l1' }, { :value => 20, :label => 'l2' } ] )
     def add( *args )
       # TODO Validation categories = series, series = labels, etc...
       directive = args.shift
@@ -148,15 +169,17 @@ module Ziya::Charts
         when :axis_category_text
           categories = args.first.is_a?(Array) ? args.shift : []
           raise ArgumentError, "Must specify an array of categories" if categories.empty?
-          categories.insert( 0, nil )
-          @options[directive] = categories
+          # don't side effect the passed in categs
+          categs = categories.clone
+          categs.insert( 0, nil )
+          @options[directive] = categs
         when :axis_category_label
           labels = args.first.is_a?(Array) ? args.shift : []
           raise ArgumentError, "Must specify an array of category labels" if labels.empty?
           @options[directive] = labels          
         when :composites
-          composites = args.first.is_a?(Array) ? args.shift: []
-          raise ArgumentError, "Must specify an array of urls for the composite chart(s)" if composites.empty?
+          composites = args.first.is_a?(Hash) ? args.shift: []
+          raise ArgumentError, "Must specify a hash of id => url pairs for the composite chart(s)" if composites.empty?
           @options[directive] = composites
         when :axis_value_label
           values = args.first.is_a?(Array) ? args.shift : []
@@ -168,8 +191,10 @@ module Ziya::Charts
           if args.first.is_a?( Array )
             points = args.shift || []
             raise ArgumentError, "Must specify an array of data points" if points.empty?
-            points.insert( 0, legend )
-            series[:points] = points
+            # don't side effect the passed in series
+            pts = points.clone
+            pts.insert( 0, legend )
+            series[:points] = pts
           else
             raise ArgumentError, "Must specify an array of data points"
           end
@@ -233,8 +258,7 @@ module Ziya::Charts
     # =========================================================================
     private
 
-    # -------------------------------------------------------------------------
-    # Inflate object state based on object hierarchy
+    # inflate object state based on object hierarchy
     def setup_state( state )
       override = self.class.name == state.class.name
       Base.components.each do |comp| 
@@ -242,8 +266,7 @@ module Ziya::Charts
       end
     end    
             
-    # -------------------------------------------------------------------------
-    # Load yaml file associated with class if any
+    # load yaml file associated with class if any
     def inflate( clazz, theme, instance=nil )
       class_name  = underscore(clazz.to_s.gsub( /Ziya::Charts/, '' )).gsub( /\//, '' )      
       class_name += '_chart' unless class_name.match( /.?_chart$/ ) 
@@ -265,104 +288,28 @@ module Ziya::Charts
       nil
     end
         
-    # -------------------------------------------------------------------------
-    # Parse erb template if any
+    # parse erb template if any
     def erb_render(fixture_content)
       b = binding
       ERB.new(fixture_content).result b      
     end
                               
-    # -------------------------------------------------------------------------
-    # Generates xml element for given data set
-    # TODO Lame ! Refact...
-    def gen_data_points( series_name, labels=nil )
-      values  = @options[series_name]
-      labels.insert( 0, nil ) if labels
+    # generates category axis data points
+    def gen_axis_category
+      categories = @options[:axis_category_text]
       @xml.row do
-        if values.respond_to? :each
-          values.each do |c|
-            if c.nil?
-              @xml.null 
-            elsif c.instance_of? String 
-              if labels and !labels.empty?
-                label = labels.shift                
-                if label
-                  @xml.string( :label => label ) { |x| x.text!( c ) }
-                else
-                  @xml.string( c )
-                end
-              else
-                @xml.string( c )
-              end
-            elsif c.respond_to? :zero?
-              if labels and !labels.empty?
-                label = labels.shift
-                if label
-                  @xml.number( :label => label ) { |x| x.text!( c.to_s ) } 
-                else
-                  @xml.number( c )
-                end
-              else
-                @xml.number( c )
-              end
-            end
+        categories.each do |category|
+          case
+            when category.nil?                 : @xml.null
+            when category.instance_of?(String) : @xml.string( category )
+            when category.respond_to?(:zero?)  : @xml.number( category )
+            when category.is_a?(Hash)          : categ = category.clone;gen_row_data( categ.delete( :value ), categ, @xml )
+            else puts "No match"
           end
-        else
-          @xml.string( values )
         end
-      end              
+      end
     end
             
-    # # -------------------------------------------------------------------------
-    # # Generates custom axis values
-    # def gen_axis_value_text( values )
-    #   return if values.nil? or values.empty?
-    #   @xml.axis_value_text do 
-    #     values.each { |v| @xml.string( v ) }
-    #   end
-    # end
-        
-    # # -------------------------------------------------------------------------
-    # # Check if the series are named
-    # def named_series?( names )
-    #   names.each do |name|
-    #     next unless name.to_s.index( 'series_' )
-    #     return @options[name][0].instance_of?(String) if @options[name] and !@options[name].empty?
-    #   end
-    #   false
-    # end
-    
-    # # -------------------------------------------------------------------------
-    # # Check if the options have custom labels ie :label_xxx tag
-    # def has_labels( names )
-    #   names.each do |name|
-    #     next unless name.to_s.index( 'labels_' )
-    #     return @options[name].size if @options[name] and !@options[name].empty?
-    #   end
-    #   0
-    # end    
-    
-    # # -------------------------------------------------------------------------
-    # # Generates custom labels
-    # def gen_labels( series_name, is_default=false )
-    #   cltn  = @options[series_name]
-    #   cltn.insert( 0, nil ) unless is_default
-    #   @xml.row do        
-    #     cltn.each { |c| ((c.nil? or c.to_s.empty?) ? @xml.null : @xml.string( c )) }
-    #   end              
-    # end    
-    
-    # # ------------------------------------------------------------------------
-    # # Generates default series labels
-    # def gen_default_labels( size )
-    #   labels = []
-    #   size.times { |i| labels << nil }
-    #   @xml.row do        
-    #     labels.each { |c| @xml.null }
-    #   end     
-    # end                
-
-    # ------------------------------------------------------------------------
     # generates chart data row
     # TODO Validate options !!
     def gen_row_data( value, opts=nil, xml=@xml )
@@ -373,19 +320,16 @@ module Ziya::Charts
       end        
     end
     
-    # -------------------------------------------------------------------------
     # generates string chart_value
     def gen_string_data( value, opts, xml )
       opts ? xml.string( opts ) { |x| x.text!( value ) } : xml.string( value )
     end
     
-    # -------------------------------------------------------------------------
     # generates number chart_value
     def gen_number_data( value, opts, xml )
       opts ? xml.number( opts ) { |x| x.text!( value.to_s ) } : xml.number( value )
     end
     
-    # -------------------------------------------------------------------------
     # generates chart data points    
     # BOZO !! Check args on hash
     def gen_chart_data( series )
@@ -394,8 +338,10 @@ module Ziya::Charts
           if row.nil?
             @xml.null 
           elsif row.instance_of? Hash
-            value = row.delete( :value )
-            gen_row_data( value, row, @xml )
+            # don't side effect the original series
+            the_clone = row.clone
+            value = the_clone.delete( :value )
+            gen_row_data( value, the_clone, @xml )
           else
             gen_row_data( row, nil, @xml )
           end
@@ -409,15 +355,14 @@ module Ziya::Charts
       end
     end
     
-    # -------------------------------------------------------------------------
-    # Lay down graph data points and labels if any
+    # lay down graph data points and labels if any
     # TODO Validate series sizes/label sizes
     def setup_series
-      raise "You must specify an axis_category_text with your series." if !@series_desc.empty? and ! @options[:axis_category_text]
+      # raise "You must specify an axis_category_text with your series." if !@series_desc.empty? and ! @options[:axis_category_text]
       
       if @options[:axis_category_text]
         @xml.chart_data do 
-          gen_data_points( :axis_category_text )
+          gen_axis_category
           # render xml for each series
           @series_desc.each do |series|
             gen_chart_data( series )
@@ -445,8 +390,7 @@ module Ziya::Charts
       
     end
     
-    # -------------------------------------------------------------------------
-    # Walk up class hierarchy to find chart inheritance classes
+    # walk up class hierarchy to find chart inheritance classes
     def ancestors
       ancestors = self.class.ancestors.reverse
       allow = false
@@ -456,14 +400,12 @@ module Ziya::Charts
       end.compact!
     end
     
-    # -------------------------------------------------------------------------
-    # Check if we should do the all monty or just render the instance styles
+    # check if we should do the all monty or just render the instance styles
     def render_parents?      
       (@render_mode == Base.mode_reset)
     end
     
-    # -------------------------------------------------------------------------
-    # Load up look and feel data
+    # load up look and feel data
     def load_lnf     
       unless @partial
         ancestors.each do |super_class|
@@ -490,13 +432,13 @@ module Ziya::Charts
       end
     end
         
-    # -------------------------------------------------------------------------
-    # Generates xml for look and feel data
+    # generates xml for look and feel data
     def setup_lnf
       load_lnf
       unless @partial
-        Base.components.each do |comp|          
-          next unless self.send( comp ).configured? # => Don't include non configured components
+        Base.components.each do |comp|               
+          # Don't include non configured components
+          next unless ( comp == :draw and @options[:composites] ) or self.send( comp ).configured?
           if comp == :draw
             instance_eval "#{comp}.flatten( @xml, @options[:composites] )"
           else
@@ -506,7 +448,7 @@ module Ziya::Charts
       end      
     end
 
-    # -------------------------------------------------------------------------  
+    # load up the allowable chart components
     def initialize_components
       # Setup instance vars
       Base.components.each do |comp|
