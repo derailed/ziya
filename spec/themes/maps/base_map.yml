@@ -1,0 +1,81 @@
+<%=map :base %>
+  <%=config :default_color %>
+    color: bbbbbb
+  
+  <%=config :background_color %>
+    opacity: 0
+  
+  <%=config :outline_color %>
+    color: 000000
+    alpha: 100
+  
+  <%=config :default_point %>
+    color:     ff0000
+    size:          20
+    opacity:       70
+    src:     fred.gif
+  
+  <%=config :scale_points %>
+    data: 50
+  
+  <%=config :line_color %>
+    color: 00ff00
+  
+  <%=config :arc_color %>
+    color: 0000ff
+  
+  <%=config :hover %>
+    font_size: 14
+    font_color: ffffff
+    background_color: 000000
+  
+  <%=config :zoom_out_button %>
+    name:             Zoum out
+    data:                    S
+    font_size:              14
+    font_color:         00ff00
+    background_color:   0000ff
+    
+  <%=config :zoom_mode %>
+    data: no_zoom # default, region
+  
+  <%=config :show_name %> # for regions
+     data: region #name for nothing
+   
+  <%=config :first_zoom %>
+    data: TX
+  
+  <%=config :zoom_out_center %>
+    loc: 40.745,-73.985
+  
+  <%=config :zoom_out_scale %>
+    data: 200
+  
+  <%=config :ranges %>
+    ranges:
+      <%= level %>
+          level: 1
+          color: cc0033
+      <%= level %>
+          level: '1 - 10'
+          color: bb0033
+              
+# <%=map :range %>
+#   data: 0 # 1..10
+#   color: 666666
+#   
+# <%=map :point_range %>
+#   data:       1
+#   color: 666666
+#   size:      14
+#   alpha:      1
+#   src:   fire.gif
+#   
+# <%=map :line_range %>
+#   data: 1
+#   color: 666666
+#   
+# <%=map :arc_range %>
+#   data: 1
+#   color: 666666
+#   

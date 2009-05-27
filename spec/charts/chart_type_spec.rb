@@ -1,8 +1,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), %w[.. spec_helper]))
+require 'ziya/core_ext/string'
 
-describe Ziya::Charts::Base do
-  include Ziya::Utils::Text
-  
+describe Ziya::Charts::Base do  
   before( :all ) do
     @types = %w[
       Area 
@@ -38,7 +37,7 @@ describe Ziya::Charts::Base do
   describe "#initialize" do
     it "should create a set of charts correctly" do
       @types.each do |type|
-        chart = Ziya::Charts.const_get( classify(type) ).new
+        chart = Ziya::Charts.const_get( type.classify ).new
         if type.index( /Threed/ )
           match = type.match( /(.*)Threed(.*)/ )
           if match[2] and !match[2].empty?

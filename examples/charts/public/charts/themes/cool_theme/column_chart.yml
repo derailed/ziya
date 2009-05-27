@@ -1,0 +1,150 @@
+<%= chart :column %>
+
+  <%=comp :axis_category %>
+    shadow:  low
+
+  <%=comp :axis_value %>
+    shadow:  low
+    steps:     4
+    size:     10
+    alpha:    50
+    min:       0
+    
+  <%=comp :chart_border %>
+    top_thickness:          1
+    bottom_thickness:       2
+    left_thickness:         0
+    color:             000000
+    right_thickness:        0
+
+  <%=comp :chart_grid_h %>
+    alpha:          10
+    thickness:       1
+    type:       dashed
+
+  <%=comp :chart_label %>
+    alpha:         90
+    size:          10
+    color:     ddffff
+    position:  middle
+
+  <%=comp :chart_rect %>
+    shadow:            high
+    corner_tr:            0
+    x:                   75
+    positive_alpha:     100
+    corner_bl:           40
+    y:                   50
+    corner_tl:            0
+    height:             200
+    positive_color:  eeeeff
+    negative_color:  dddddd
+    bevel:               bg
+    corner_br:           40
+    negative_alpha:     100
+    width:              300
+
+  <%=comp :chart_transition %>
+    delay:         .5
+    order:     series
+    type:       scale
+    duration:     0.5
+
+  <%=comp :draw %>
+    components:
+      - <%= drawing :text %>
+          shadow:      high
+          alpha:         50
+          rotation:     -90
+          size:          75
+          x:            -20
+          y:            300
+          color:     f8f8ff
+          height:       200
+          h_align:   center
+          width:        300
+          text:      'animals'
+      - <%= drawing :text %>
+          shadow:       low
+          alpha:         50
+          rotation:     -90
+          size:          16
+          x:              7
+          y:            230
+          color:     000033
+          height:        50
+          h_align:   center
+          width:        300
+          v_align:   middle
+          text:      '(millions)'
+
+  <%=comp :filter %>
+    filters:
+      - <%= filter_type :shadow %>
+          blurY:       10
+          angle:       45
+          alpha:       35
+          id:        high
+          distance:     5
+          blurX:       10
+      - <%= filter_type :shadow %>
+          blurY:       5
+          angle:      45
+          alpha:      35
+          id:        low
+          distance:    2
+          blurX:       5
+      - <%= filter_type :bevel %>
+          blurY:               50
+          inner:             true
+          angle:               45
+          highlightAlpha:      50
+          id:                  bg
+          highlightColor:  ffffff
+          shadowAlpha:         10
+          blurX:               50
+          distance:            10
+      - <%= filter_type :bevel %>
+          blurY:               30
+          inner:             true
+          angle:              -80
+          highlightAlpha:      50
+          shadowColor:     000088
+          id:                blue
+          highlightColor:  ffffff
+          shadowAlpha:         25
+          blurX:                0
+          distance:            20
+      - <%= filter_type :bevel %>
+          blurY:               30
+          inner:             true
+          angle:              -80
+          highlightAlpha:      25
+          shadowColor:     000000
+          id:                gray
+          highlightColor:  ffffff
+          shadowAlpha:         20
+          blurX:                0
+          distance:            20
+
+  <%=comp :legend %>
+    shadow:             low
+    line_alpha:           0
+    size:                12
+    alpha:               90
+    x:                   75
+    fill_alpha:           8
+    y:                   27
+    margin:               5
+    height:              20
+    fill_color:      000066
+    color:           333355
+    line_thickness:       0
+    width:              300
+
+  <%=comp :series_color %>
+    colors: 666666,768bb3
+
+  <%=comp :series %>
+    set_gap:   40
+    bar_gap:  -25

@@ -1,9 +1,5 @@
-# $Id$
-
-# BOZO !! Document !!
-
-# Equivalent to a header guard in C/C++
-# Used to prevent the class/module from being loaded more than once
+# Initializes the ziya framework. Call Ziya.initialize(...) somewhere in your
+# framework initialization routine
 unless defined? Ziya
   module Ziya          
     # :stopdoc:
@@ -11,20 +7,28 @@ unless defined? Ziya
     PATH    = ::File.dirname(LIBPATH) + ::File::SEPARATOR
                
     def self.default_configuration
-      { :themes_dir => File.join( File.dirname(__FILE__), %w[.. charts themes] ),
+      { 
+        :themes_dir => File.join( File.dirname(__FILE__), %w[.. charts themes] ),
         :log_file   => $stdout,
-        :log_level  => :info }
+        :log_level  => :info 
+      }
     end
                             
     def self.initialize( opts={} )
-      puts ">>> No logger specified. Using ZiYa default logger" unless opts[:logger]
-      puts ">>> No themes_dir specified. Using ZiYa default themes" unless opts[:themes_dir]      
+      if opts[:log_level] == :debug
+        puts ">>> No logger specified. Using ZiYa default logger" unless opts[:logger]
+        puts ">>> No themes_dir specified. Using ZiYa default themes" unless opts[:themes_dir]      
+      end
       @config = default_configuration.merge( opts )
       @logger = opts[:logger] if opts[:logger]
 
-      # Verify existance of themes, designs and helper dirs if any
+      # Verify existence of themes, designs and helper dirs if any
       if themes_dir
         raise "Unable to find themes directory `#{themes_dir}" unless File.exists?( themes_dir )
+      end
+
+      if map_themes_dir
+        raise "Unable to find map themes directory `#{map_themes_dir}" unless File.exists?( map_themes_dir )
       end
 
       if designs_dir
@@ -55,6 +59,11 @@ unless defined? Ziya
     # the themes root directory location
     def self.themes_dir
       config[:themes_dir]
+    end
+
+    # the map themes root directory location
+    def self.map_themes_dir
+      config[:map_themes_dir]
     end
 
     # the gauges designs root directory location

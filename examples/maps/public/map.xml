@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- States with the Death Penalty  -->
+<us_states>
+
+
+
+
+<state id="range">
+	<data>6</data>
+	<color>ff0000</color>
+</state>
+<state id="range">
+	<data>5</data>
+
+	<color>dd0000</color>
+</state>
+<state id="range">
+	<data>4</data>
+	<color>bb0000</color>
+</state>
+<state id="range">
+	<data>3</data>
+	<color>990000</color>
+
+</state>
+<state id="range">
+	<data>2</data>
+	<color>770000</color>
+</state>
+<state id="range">
+	<data>1</data>
+	<color>cc0033</color>
+</state>
+
+<state id="range">
+	<data>0</data>
+	<color>ff0033</color>
+</state>
+
+<state id="outline_color">
+	<color>330000</color>
+</state>
+<state id="default_color">
+	<color>ffffff</color>
+
+</state>
+<state id="background_color">
+	<color>ffffff</color>
+</state>
+
+	
+<state id="AL">
+	<name>Alabama</name>
+	<data>6</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=AL</url>
+
+</state>
+<state id="AK">
+	<name>Alaska</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=AK</url>
+</state>
+<state id="AZ">
+	<name>Arizona</name>
+	<data>2</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=AZ</url>
+</state>
+<state id="AR">
+	<name>Arkansas</name>
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=AR</url>
+</state>
+<state id="CA">
+	<name>California</name>
+
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=CA</url>
+</state>
+<state id="CO">
+	<name>Colorado</name>
+	<data>5</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=CO</url>
+
+</state>
+<state id="CT">
+	<name>Connecticut</name>
+	<data>3</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=CT</url>
+</state>
+<state id="DE">
+	<name>Delaware</name>
+	<data>2</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=DE</url>
+</state>
+<state id="DC">
+	<name>District of Columbia</name>
+	<data>4</data>
+</state>
+<state id="FL">
+	<name>Florida</name>
+	<data>3</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=FL</url>
+</state>
+<state id="GA">
+	<name>Georgia</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=GA</url>
+</state>
+<state id="HI">
+	<name>Hawaii</name>
+
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=HI</url>
+</state>
+<state id="ID">
+	<name>Idaho</name>
+	<data>3</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=ID</url>
+
+</state>
+<state id="IL">
+	<name>Illinois</name>
+	<data>6</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=IL</url>
+</state>
+<state id="IN">
+	<name>Indiana</name>
+	<data>2</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=IN</url>
+</state>
+<state id="IA">
+	<name>Iowa</name>
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=IA</url>
+</state>
+<state id="KS">
+	<name>Kansas</name>
+
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=KS</url>
+</state>
+<state id="KY">
+	<name>Kentucky</name>
+	<data>4</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=KY</url>
+
+</state>
+<state id="LA">
+	<name>Louisiana</name>
+	<data>5</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=LA</url>
+</state>
+<state id="ME">
+	<name>Maine</name>
+	<data>1</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=ME</url>
+</state>
+<state id="MD">
+	<name>Maryland</name>
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MD</url>
+</state>
+<state id="MA">
+	<name>Massachusetts</name>
+
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MA</url>
+</state>
+<state id="MI">
+	<name>Michigan</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MI</url>
+
+</state>
+<state id="MN">
+	<name>Minnesota</name>
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MN</url>
+</state>
+<state id="MS">
+	<name>Mississippi</name>
+	<data>2</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MS</url>
+</state>
+<state id="MO">
+	<name>Missouri</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MO</url>
+</state>
+<state id="MT">
+	<name>Montana</name>
+
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=MT</url>
+</state>
+<state id="NE">
+	<name>Nebraska</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NE</url>
+
+</state>
+<state id="NV">
+	<name>Nevada</name>
+	<data>4</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NV</url>
+</state>
+<state id="NH">
+	<name>New Hampshire</name>
+	<data>4</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NH</url>
+</state>
+<state id="NJ">
+	<name>New Jersey</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NJ</url>
+</state>
+<state id="NM">
+	<name>New Mexico</name>
+
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NM</url>
+</state>
+<state id="NY">
+	<name>New York</name>
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NY</url>
+
+</state>
+<state id="NC">
+	<name>North Carolina</name>
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=NC</url>
+</state>
+<state id="ND">
+	<name>North Dakota</name>
+	<data>5</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=ND</url>
+</state>
+<state id="OH">
+	<name>Ohio</name>
+	<data>0</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=OH</url>
+</state>
+<state id="OK">
+	<name>Oklahoma</name>
+
+	<data>4</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=OK</url>
+</state>
+<state id="OR">
+	<name>Oregon</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=OR</url>
+
+</state>
+<state id="PA">
+	<name>Pennsylvania</name>
+	<data>5</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=PA</url>
+</state>
+<state id="RI">
+	<name>Rhode Island</name>
+	<data>1</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=RI</url>
+</state>
+<state id="SC">
+	<name>South Carolina</name>
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=SC</url>
+</state>
+<state id="SD">
+	<name>South Dakota</name>
+
+	<data>4</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=SD</url>
+</state>
+<state id="TN">
+	<name>Tennessee</name>
+	<data>3</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=TN</url>
+
+</state>
+<state id="TX">
+	<name>Texas</name>
+	<data>3</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=TX</url>
+</state>
+<state id="UT">
+	<name>Utah</name>
+	<data>1</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=UT</url>
+</state>
+<state id="VT">
+	<name>Vermont</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=VT</url>
+</state>
+<state id="VA">
+	<name>Virginia</name>
+
+	<data>6</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=VA</url>
+</state>
+<state id="WA">
+	<name>Washington</name>
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=WA</url>
+
+</state>
+<state id="WV">
+	<name>West Virginia</name>
+	<data>1</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=WV</url>
+</state>
+<state id="WI">
+	<name>Wisconsin</name>
+	<data>3</data>
+
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=WI</url>
+</state>
+<state id="WY">
+	<name>Wyoming</name>
+	<data>2</data>
+	<url>http://www.senate.gov/general/contact_information/senators_cfm.cfm?State=WY</url>
+</state>
+</us_states>

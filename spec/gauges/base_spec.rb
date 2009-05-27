@@ -1,6 +1,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), %w[.. spec_helper]))
 
 describe Ziya::Gauges::Base do
+
   describe "#initialize" do
     before( :each ) do
       @gauge = Ziya::Gauges::Base.new( "test_license", "test" ) 
@@ -86,5 +87,4 @@ describe Ziya::Gauges::Base do
     buff.scan( /url=\"(\/\w+\/\w+)\"/ ).should         == [ ["/blee/fred"] ]
     buff.scan( /delay=\"(.*?\d+)\"/ ).should         == [ ["30"] ]
   end    
-  
 end

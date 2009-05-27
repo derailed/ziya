@@ -11,7 +11,9 @@
 # Author:: Fernand Galiana
 # Date::   Dec 15th, 2006
 # -----------------------------------------------------------------------------
-require 'ziya/helpers/base_helper'
+require 'ziya/html_helpers'
+require 'ziya/html_helpers/charts'
+require 'ziya/yaml_helpers/charts'
 require 'yaml'
 
 module Ziya::Charts
@@ -21,7 +23,7 @@ module Ziya::Charts
   # you must create a theme directory in your application public/charts/themes dir. And
   # reference it via the #add method using the :theme directive.
   class Base
-    include Ziya::Helpers::BaseHelper
+    include Ziya::YamlHelpers::Charts, Ziya::HtmlHelpers::Charts
     
     # =========================================================================                
     protected      
@@ -166,6 +168,7 @@ module Ziya::Charts
       # TODO Validation categories = series, series = labels, etc...
       directive = args.shift
       case directive
+        # BOZO !! Idea - could use a formatter object to specificy how you want to format this series
         when :axis_category_text
           categories = args.first.is_a?(Array) ? args.shift : []
           raise ArgumentError, "Must specify an array of categories" if categories.empty?
@@ -173,6 +176,7 @@ module Ziya::Charts
           categs = categories.clone
           categs.insert( 0, nil )
           @options[directive] = categs
+        # BOZO !! Need to constrain this only scatter and bubble support this !!
         when :axis_category_label
           labels = args.first.is_a?(Array) ? args.shift : []
           raise ArgumentError, "Must specify an array of category labels" if labels.empty?
@@ -239,7 +243,7 @@ module Ziya::Charts
       @xml.chart do
         @xml.license( @license ) unless @license.nil?
         if render_parents?
-          if !@type.nil?
+          if @type
             @xml.chart_type( @type )              
           elsif @options[:chart_types].is_a? Array and ! @options[:chart_types].empty?
             @xml.chart_type do   
@@ -268,16 +272,15 @@ module Ziya::Charts
             
     # load yaml file associated with class if any
     def inflate( clazz, theme, instance=nil )
-      class_name  = underscore(clazz.to_s.gsub( /Ziya::Charts/, '' )).gsub( /\//, '' )      
+      class_name  = clazz.to_s.gsub( /Ziya::Charts/, '' ).underscore.gsub( /\//, '' )
       class_name += '_chart' unless class_name.match( /.?_chart$/ ) 
       begin
         file_name = "#{theme}/#{class_name}"
         file_name = "#{theme}/#{instance}" unless instance.nil?
         Ziya.logger.debug ">>> Ziya attempt to load style sheet file '#{file_name}"        
         yml = IO.read( "#{file_name}.yml" )
-# Ziya.logger.debug( yml )        
         load = YAML::load( erb_render( yml ) )
-        Ziya.logger.info ">>> ZiYa [loading styles] -- #{file_name}.yml"        
+        Ziya.logger.debug ">>> ZiYa [loading styles] -- #{file_name}.yml"        
         return load
       rescue SystemCallError => boom
         ; # ignore if no style file...
@@ -296,7 +299,7 @@ module Ziya::Charts
                               
     # generates category axis data points
     def gen_axis_category
-      categories = @options[:axis_category_text]
+      categories = @options[:axis_category_text] || []
       @xml.row do
         categories.each do |category|
           case
@@ -335,12 +338,12 @@ module Ziya::Charts
     def gen_chart_data( series )
       block = lambda {
         series[:points].each do |row|      
-          if row.nil?
+          if !row
             @xml.null 
-          elsif row.instance_of? Hash
+          elsif row.instance_of?(Hash)
             # don't side effect the original series
             the_clone = row.clone
-            value = the_clone.delete( :value )
+            value     = the_clone.delete( :value )
             gen_row_data( value, the_clone, @xml )
           else
             gen_row_data( row, nil, @xml )
@@ -357,9 +360,7 @@ module Ziya::Charts
     
     # lay down graph data points and labels if any
     # TODO Validate series sizes/label sizes
-    def setup_series
-      # raise "You must specify an axis_category_text with your series." if !@series_desc.empty? and ! @options[:axis_category_text]
-      
+    def setup_series      
       if @options[:axis_category_text]
         @xml.chart_data do 
           gen_axis_category
@@ -453,7 +454,7 @@ module Ziya::Charts
       # Setup instance vars
       Base.components.each do |comp|
         instance_var = lambda { |v| self.instance_eval{ instance_variable_set "@#{comp}", v } }
-        instance_var.call(Ziya::Components.const_get(classify(comp)).new)
+        instance_var.call(Ziya::Charts::Support.const_get( comp.to_s.classify ).new)
       end      
     end       
   end

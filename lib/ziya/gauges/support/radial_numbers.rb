@@ -12,7 +12,7 @@ module Ziya::Gauges::Support
     has_attribute :start_num, :end_num, 
                   :font, :size, :bold, :width, :height, :align
 
-    # overrides flatten to generate a series of radial tick marksß
+    # overrides flatten to generate a series of radial tick marks
     def flatten( xml )
       number = start_num
       i      = start_angle

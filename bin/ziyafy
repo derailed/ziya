@@ -1,25 +1,30 @@
 #!/usr/bin/env ruby            
 require 'optparse'
 require 'ostruct'
+require 'fileutils'
 
 require File.expand_path( File.join(File.dirname(__FILE__), '..', 'lib', 'ziya') )
     
+# TODO - Use main
 module Ziya
   class Ziyafy  
     # Copy necessary ZiYa components to a ruby web application
     def initialize( argv=ARGV ) 
       option_parser = default_option_parser 
       option_parser.parse!(argv)
-      puts "Installing ZiYa artifacts in `#{options.public_dir}"        
       copy_artifacts
     end                  
           
     # copies ziya artifacts to public app directory
     def copy_artifacts
-      source_dir = File.expand_path( File.join( File.dirname(__FILE__), %w[.. charts]) )
-      FileUtils.cp_r( source_dir, options.public_dir )
-      source_dir = File.expand_path( File.join( File.dirname(__FILE__), %w[.. gauges]) )
-      FileUtils.cp_r( source_dir, options.public_dir )      
+      %w[charts gauges maps].each do |s|
+        if options.send( s ) 
+          dest_dir = File.join( options.public_dir )
+          src_dir  = File.expand_path( File.join( File.dirname(__FILE__), %w[.. resources], s ) )
+          puts "Installing ZiYa artifacts in `#{dest_dir}"        
+          FileUtils.cp_r( src_dir, dest_dir )
+         end
+      end          
     end
     
     # access the options
@@ -28,6 +33,9 @@ module Ziya
         @options = OpenStruct.new 
         # Unless specified copy artifacts to the public directory
         @options.public_dir = File.join( Dir.pwd, %w[public] )
+        @options.charts     = false
+        @options.gauges     = false
+        @options.maps       = false
       end
       return @options
     end
@@ -36,7 +44,25 @@ module Ziya
     def default_option_parser #:nodoc:
       OptionParser.new do |op|
         op.separator ""
-        op.separator "Ziyafy options"
+        op.separator "ziyafy options:"
+
+        op.on( "-c", "--charts", "Copy ZiYa charts artifacts only" ) do |dir|
+          options.charts = true
+        end
+
+        op.on( "-g", "--gauges", "Copy ZiYa gauges artifacts only" ) do |dir|
+          options.gauges = true
+        end
+
+        op.on( "-m", "--maps", "Copy ZiYa maps artifacts only" ) do |dir|
+          options.maps = true
+        end
+
+        op.on( "-a", "--all", "Copy all ZiYa artifacts" ) do |dir|
+          options.charts = true
+          options.gauges = true
+          options.maps   = true
+        end
 
         op.on( "-p", "--public_dir FILE", "The location of the public app directory." ) do |dir|
           options.public_dir = dir
@@ -48,6 +74,3 @@ module Ziya
 end  
 
 Ziya::Ziyafy.new(ARGV)
-
-
-    

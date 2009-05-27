@@ -90,7 +90,7 @@ namespace :gem do
 
   desc 'Install the gem'
   task :install => [:clobber, :package] do
-    sh "#{SUDO} #{GEM} install pkg/#{PROJ.spec.full_name} --no-rdoc --no-ri"
+    sh "#{SUDO} #{GEM} install pkg/#{PROJ.spec.full_name} --no-rdoc --no-ri --local"
   end
 
   desc 'Uninstall the gem'

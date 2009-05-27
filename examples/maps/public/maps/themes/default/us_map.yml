@@ -1,0 +1,20 @@
+# Here we redefine the map outline color using a helper and
+# specify the heat map ranges using the handy dandy heat_range component...
+<%= map :us%>
+
+  # overrides background color and opacity to white/full
+  <%=config :background_color %>
+    color:   ffffff
+    opacity: 100
+   
+  # overrides state outline with color from helper
+  <%=config :outline_color %>
+    color: <%= outline_color %>
+    
+  <%=config :heat_range %>
+    base_color:   'f49329'
+    min:          0
+    max:          100
+    step:         10
+    color_step:   90
+    color_method: darken_by

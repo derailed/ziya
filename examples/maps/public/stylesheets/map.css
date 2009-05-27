@@ -1,0 +1,16 @@
+body {
+  background-color: #ffffff;  
+  font-family:      "Arial","Helvetica","Verdana","sans-serif";
+	color:            #5c5c5c;
+  font-size:        12px;
+	font-size-adjust: none;
+	font-stretch:     normal;
+	font-style:       normal;
+	font-variant:     normal;
+	font-weight:      normal;
+  margin:           0;  
+}
+
+h1 {
+  color: #ff0000;
+}

@@ -40,8 +40,8 @@ describe Ziya::Charts::Base do
     end    
     
     it "should support setting a composite chart urls" do
-      @chart.add( :composites, { :fred => "url1", :blee => "url2" } )
-      @chart.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><chart><draw><image url=\"/charts/charts.swf?library_path=/charts/charts_library&amp;xml_source=url1&amp;chart_id=fred\"/><image url=\"/charts/charts.swf?library_path=/charts/charts_library&amp;xml_source=url2&amp;chart_id=blee\"/></draw></chart>"
+      @chart.add( :composites, { :fred => { :url => "url1" }, :blee => { :url => "url2" } } )
+      @chart.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?><chart><draw><image url=\"/charts/charts.swf?library_path=/charts/charts_library&amp;xml_source=url2&amp;chart_id=blee\"/><image url=\"/charts/charts.swf?library_path=/charts/charts_library&amp;xml_source=url1&amp;chart_id=fred\"/></draw></chart>"
     end    
     it "should error if the composite url arg is not an array" do
       lambda { @chart.add( :composites, "") }.should raise_error( ArgumentError, /hash of id => url/ )

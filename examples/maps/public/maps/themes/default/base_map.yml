@@ -1,0 +1,27 @@
+# This demonstrates stylesheet inheritance. Define a base style here for
+# the look and feel of all maps. Then you can refine/augment the styles in derived
+# classes. How cool is that ?
+<%= map :base %>
+
+  # color to be used when to heat_color can be found for range or value
+  <%=config :default_color %>
+    color: 000000
+
+  # states outline color
+  <%=config :outline_color %>
+    color: 000000
+    
+  # map background color
+  <%=config :background_color %>
+    color:   ff0000
+    opacity: 20
+    
+  # tooltip configuration
+  <%=config :hover %>
+    font_size:        10
+    font_color:       434343
+    background_color: fcf8b8
+  
+  # disable zooming
+  <%=config :zoom_mode %>
+    data: no zoom

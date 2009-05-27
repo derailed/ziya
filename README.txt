@@ -1,7 +1,6 @@
 === ZiYa
     by Fernand Galiana
-    ziya.rubyforge.org ( deprecated )
-    git://github.com/derailed/ziya.git ( preferred )
+    git://github.com/derailed/ziya.git
 
 == RELEASES
 
@@ -21,59 +20,61 @@
           - added support for flash_to_javascript callbacks
           - added support ids in composite charts
           - various bug fixes 
+  2.1.0 - Refactor some of the underlying ziya code
+          - Beef up test suite
+          - changed component tree
+        - Added geographical maps support
+        - Changed the default ziyafy to install charts only by default
+          Run ziyafy --help for the various options
+        - Changed add( :composites, ... ) call to take in a hash of hash instead of id/url pair.
+          So the correct call is now of the form chart.add( :composites, :id => { :url => ... } )
+          You can now add extra attributes that will be passed to the generated image component.
   
 == DESCRIPTION:
 
-ZiYa allows you to easily display graphs in your ruby based applications by leveraging
-SWF Charts (http://www.maani.us/xml_charts/index.php) and SWF gauges (http://www.maani.us/gauge/index.php). 
-This gem bundles version 5.03 and 1.6 of these flash libraries. Incorporating flash graphs or gauge in your app 
-relieves the server by allowing for delegating graph rendering to the client side. Using this gem, you will
-be able to easily create great looking charts for your application. You will also be able
-to use the charts or gauges has a navigation scheme by embedding various link in the graphical components
-thus bring to the table an ideal scheme for reporting and dashboard like applications. Your
-managers will love you for it !!
+ZiYa allows you to easily create interactive charts, gauges and maps for your web applications. ZiYa leverages
+flash which offload heavy server side processing to the client. At the root ZiYa allows you to easily generate an
+XML files that will be downloaded to the client for rendering. Using this gem, you will be able to easily create great
+looking charts for your application. You will also be able to use the charts, gauges and maps has a navigation scheme 
+by embedding various link in the graphical components thus bringing to the table an ideal scheme for reporting and dashboard
+like applications. Your manager will love you for it !!
 
-	Checkout the demo: http://ziya.liquidrail.com
-	Video            : http://www.youtube.com/watch?v=axIMmMHdXzo ( Out of date but you'll get the basics... )
-	Documentation    : http://ziya.liquidrail.com/docs
-	Forum            : http://groups.google.com/group/ziya-plugin
-	Repositories     : http://rubyforge.org/projects/ziya ( deprecated )
-	                   git://github.com/derailed/ziya.git ( preferred )
-
+	Blog Site     : http://ziya.liquidrail.com
+	Documentation : http://ziya.liquidrail.com/docs
+	Forum         : http://groups.google.com/group/ziya-plugin
+	Repositories  : git://github.com/derailed/ziya.git
 
 == FEATURES:
 
 *  Supports a wide variety of chart/gauge types, sure to fit your needs.
+*  Geographical maps. Maps can be drillable and refreshable
 *  Relieves your server load by generating the actual chart on the client side.
-*  Allows you to style your charts just like you would an html page using css styles
-   philosophy. Each chart can be associated with a YAML file that allows you to specify
-   preferences based on SWF Charts properties. Chart stylesheets reside under 
-   public/charts/themes. Each chart type may have an associated YAML file. You can either 
-   inherit the default styles or define your own by specifying an id when you create your graph. 
-   The styles will cascade thru your graph class hierarchy and override default preferences as you
-   would in a stylesheet.
-   NOTE: XML/SWF charts are free of charge unless you need to use special features such
-   as embedded links and printing. 
-   The package cost $45 per domain, including localhost and is well worth the investment. 
-   A similar fee applies to the gauge framework.
-*  We are leveraging ERB within the YAML file to provide access to the chart/gauge state. State
-   can be passed in via the options hash when the graph/gauge is generated.
-   You can also define your own methods in helpers/ziya/xxx_helper. You can access these
-   helper methods in your style file just like you would in a rails template.
-*  Theme support. You can change the appearance and behavior of any charts by introducing
-   new themes under the public/charts/themes directory.
+*  Provides for cascading like css-styles for your charts using YAML files.
+*  Themes support. You can change the appearance and behavior of any charts by introducing new themes
 
 == REQUIREMENTS:
 
-  ZiYa depends on the logging gem version >= 0.9.0
-
+  ZiYa depends on the logging gem version ~> 0.9.0
+  
+  ZiYa comes pre-bundled with the following packages:
+  * XML/SWF charts Version 5.07 (http://www.maani.us/xml_charts/index.php)
+  * XML/SWF gauges Version 1.6  (http://www.maani.us/gauge/index.php)
+  * DIY Maps                    (http://backspace.com/mapapp/)
+  
+  XML/SWF
+    * XML/SWF charts are free of charge unless you need to use special features such
+      as embedded links and printing. 
+       
+      The package cost $45 per domain, including localhost and is well worth the investment. 
+      A similar fee applies to the gauge framework.
+  
+  DIY Map
+    * This package is free for use in non-commercial applications. For commercial applications,
+    there is a $20.00 license per domain. I have chosen this package over others, as it supports
+    the interaction and configuration I was looking for, it seems stable and packs lots of features
+    for a reasonable price.
+  
 == INSTALL:
-  
-  On rubyforge
-  
-  sudo gem install ziya ( deprecated )
-  
-  or github
   
   sudo gem install derailed-ziya ( preferred )
   
@@ -83,74 +84,76 @@ managers will love you for it !!
   
   This will copy the necessary themes and flash files to run ZiYa in your application 
   public/charts directory.
+  
+  > ziyafy --help - for all available options.
       
 == SYNOPSIS:
   
-  This new gem version requires a client update to flash 9.0 and possibly you will
-  need to get a new license from XML/SWF >= 5.0 ( $45.0 for your domain ), if you want to use
-  advanced features suck as links and live updates. Also some api's have changed. 
-  I will try to push a new sample application and more docs in the next few weeks. 
-  So make sure you try this out first in a non production environment and report
-  bugs or side effects. I'll do my best to keep up with the demand. If anyone would like to give
-  me a hand with a tutorial app or improving the docs, I am all hears...
+  This gem version requires a client update to flash 9.0 and possibly you will
+  need to get a new license from XML/SWF >= 5.0, if you want to use
+  advanced features suck as links and live updates.
   
-  When using within a rails application you will need to create a ziya.rb file in your
-  config/initializers directory ( Rails 2.0 ). 
+== Creating a ZiYa chart in a rails application
   
-  NOTE: For rails version < 2.0, you can add the following code in your config/enviroment.rb directly.
-  
-  ziya.rb:
-  
-    # Pull in the ZiYa gem framework
-    gem "ziya", ">= 2.0.0"
-    require 'ziya'
+  1 - Edit your environment.rb and add
 
-    # Initializes the ZiYa Framework
-    Ziya.initialize( 
-      :logger      => RAILS_DEFAULT_LOGGER,
-      :helpers_dir => File.join( File.dirname(__FILE__), %w[.. .. app helpers ziya] ),
-      :themes_dir  => File.join( File.dirname(__FILE__), %w[.. .. public charts themes]) 
-    )
+    environment.rb
+      
+    config.gem 'derailed-ziya', '~> 2.1.0
   
-   This will initialize the gem. You can log the output to stdout using the ZiYa bundled logger
-   or specify a file ie File.join( File.dirname(__FILE__), %w[.. log ziya.log]. If you choose to use the 
-   ZiYa logger, you can specify the :log_level option to either :warn :info :debug or :error.
-   You will need to indicate your themes directory typically located under public/charts/themes or any location
-   you'll choose. Lastly you can specify a custom helper directory :helpers_dir, so you can use helper methods 
-   within your ZiYa stylesheets.
+  2 - Create a ziya.rb file under config/initializers
+
+      ziya.rb:
+
+        # Pull in the ZiYa gem framework
+        require 'derailed-ziya'
+
+        # Initializes the ZiYa Framework
+        Ziya.initialize( 
+          :logger     => RAILS_DEFAULT_LOGGER,
+          :themes_dir => File.join( File.dirname(__FILE__), %w[.. .. public charts themes]) 
+        )
+
+       This will initialize the gem. You can log the output to stdout using the ZiYa bundled logger
+       or specify a file ie File.join( File.dirname(__FILE__), %w[.. log ziya.log]. If you choose to use the 
+       ZiYa logger, you can specify the :log_level option to either :warn :info :debug or :error.
+       You will need to specify your themes directory typically located under public/charts/themes or any location
+       you'll choose.
+      
+   3 - Create a chart controller
    
-   NOTE: You must create the app/helpers/ziya and public/chart/themes directory in your application.
+      blee_controller.rb:
    
-== Creating a chart
-   
-   * blee_controller.rb
-   
-     class BleeController < ApplicationController
-       helper Ziya::Helper
+       class BleeController < ApplicationController
+        helper Ziya::HtmlHelpers::Charts
+        helper Ziya::YamlHelpers::Charts
        
-       # Callback from the flash movie to get the chart's data
-       def load_chart
-         # Create a bar chart with 2 series composed of 3 data points each.
-         # Chart will be rendered using the default look and feel
-         chart = Ziya::Charts::Bar.new
-         chart.add( :axis_category_text, %w[2006 2007 2008] )
-         chart.add( :series, "Dogs", [10,20,30] )
-         chart.add( :series, "Cats", [5,15,25] )
-         respond_to do |fmt|
-          fmt.xml => { render :xml => chart.to_xml }
+        # Callback from the flash movie to get the chart's data
+        def load_chart
+          # Create a bar chart with 2 series composed of 3 data points each.
+          # Chart will be rendered using the default look and feel
+          chart = Ziya::Charts::Bar.new
+          chart.add( :axis_category_text, %w[2006 2007 2008] )
+          chart.add( :series, "Dogs", [10,20,30] )
+          chart.add( :series, "Cats", [5,15,25] )
+          respond_to do |fmt|
+            fmt.xml => { render :xml => chart.to_xml }
+          end
        end
-     end
-     
-   * blee/index.html.erb
+  
+   4 - Create a view
    
-     Defines the necessary tag to embed a flash movie in your html page.
-     This will callback to your controller to fetch the necessary xml.
-     <%= ziya_chart load_chart_url, :size => "300x200" -%>
+      blee/index.html.erb:
    
-   * config/routes.rb
+        # Defines the necessary tag to embed a flash movie in your html page.
+        # This will callback to your controller to fetch the necessary xml.
+        <%= ziya_chart load_chart_url -%>
    
-     Creates a named route for the chart.
-     map.load_chart '/blee/load_chart', :controller => 'blee', :action => 'load_chart'
+   5 - Create a named route
+   
+      config/routes.rb:
+      
+       map.load_chart '/blee/load_chart', :controller => 'blee', :action => 'load_chart'
    
 == Creating a gauge
 
@@ -166,7 +169,7 @@ managers will love you for it !!
   
     class FredController < ApplicationController
       def load_gauge
-        gauge = Ziya::Gauges::Base.new( @license_key, 'my_gauge' )
+        gauge = Ziya::Gauges::Base.new( LICENCE_KEY, 'my_gauge' )
          respond_to do |fmt|
           fmt.xml => { render :xml => gauge.to_xml }
          end
@@ -175,7 +178,7 @@ managers will love you for it !!
     
    * fred/index.html.erb
    
-   <%= ziya_gauge load_gauge_url, :size => "300x200" -%>
+   <%= ziya_gauge load_gauge_url -%>
 
    * config/routes.rb
    

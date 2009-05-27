@@ -1,0 +1,6 @@
+<%=map :world %>
+  <%=config :default_color %>
+    color: 00fa00
+    
+  <%=config :background_color %>
+    opacity: 10   

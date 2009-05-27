@@ -1,6 +1,11 @@
+require 'ziya/yaml_helpers/gauges'
+require 'ziya/html_helpers/gauges'
+require 'erb'
+require 'cgi'
+
 module Ziya::Gauges
   class Base
-    include Ziya::Helpers::BaseHelper
+    include Ziya::YamlHelpers::Gauges, Ziya::HtmlHelpers::Gauges
 
     attr_accessor :license, :design_id
     attr_reader   :type, :components
@@ -12,7 +17,7 @@ module Ziya::Gauges
       
       # load up associated helper
       loaded = load_helper( Ziya.helpers_dir ) if Ziya.helpers_dir
-      Ziya.logger.warn( ">>> ZiYa -- no helper for gauge `#{design_id}" ) unless loaded
+      Ziya.logger.debug( ">>> ZiYa -- no helper for gauge `#{design_id}" ) unless loaded
 
       # init defaults
       @options = default_options      
@@ -64,7 +69,7 @@ module Ziya::Gauges
 
       # retrieve bundled design directory
       def bundled_designs_dir
-        Ziya.path( %w[gauges designs] )
+        Ziya.path( %w[resources gauges designs] )
       end
       
       # -----------------------------------------------------------------------
@@ -74,7 +79,7 @@ module Ziya::Gauges
           unless helper_file =~ /^(#{design_id}_helper).rb$/ or helper_file =~ /^(base_helper).rb$/
             next
           end
-          Ziya.logger.info( ">>> ZiYa loading custom helper `#{$1}" )
+          Ziya.logger.debug( ">>> ZiYa loading custom helper `#{$1}" )
           # BOZO !! This will only work in rails ??
           if defined? RAILS_ROOT
             require_dependency File.join(helper_dir, $1) 
@@ -118,7 +123,7 @@ module Ziya::Gauges
         elsif std_design
           design = std_design
         end        
-# Ziya.logger.debug "!!!! Design\n#{design.to_yaml}"
+# Ziya.logger.info "!!!! Design #{design_id} -- \n#{design.to_yaml}"
         # flatten components to xml
         design.components.each do |name, value|
 # Ziya.logger.debug "Processing #{name}"          
@@ -148,23 +153,23 @@ module Ziya::Gauges
       # -----------------------------------------------------------------------
       # Load yaml file associated with class if any
       def inflate( clazz, designs_dir, design )
-        class_name  = underscore( demodulize( clazz.to_s ) )
+        class_name  = clazz.to_s.demodulize.underscore
         begin
           file_name = "#{designs_dir}/#{design}.yml"
           Ziya.logger.debug ">>> ZiYa attempt to load design file '#{file_name}"    
           return nil unless File.exists?( file_name )          
           yml = IO.read( file_name )
-# Ziya.logger.debug ">>> Unprocessed yaml...\n#{yml}\n"        
+# Ziya.logger.info ">>> Unprocessed yaml...\n#{yml}\n"        
           processed = erb_render( yml )
-# Ziya.logger.debug ">>> Processed yaml...\n#{processed}"
+# Ziya.logger.info ">>> Processed yaml...\n#{processed}"
           load = YAML::load( processed )
-          Ziya.logger.info ">>> ZiYa successfully loaded design file `#{file_name}"        
+          Ziya.logger.debug ">>> ZiYa successfully loaded design file `#{file_name}"        
           return load
         rescue SystemCallError => boom
-          Ziya.logger.error boom
+          Ziya.logger.debug boom
         rescue => bang
-          Ziya.logger.error ">>> ZiYa -- Error encountered loading design file `#{file_name} -- #{bang}" 
-          bang.backtrace.each { |l| Ziya.logger.error( l ) }
+          Ziya.logger.info ">>> ZiYa -- Error encountered loading design file `#{file_name} -- #{bang}" 
+          bang.backtrace[0..3].each { |l| Ziya.logger.debug( l ) }
         end
         nil
       end    

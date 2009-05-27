@@ -1,0 +1,26 @@
+<div style="margin-left:5px">
+  <h1>ZiYa map examples</h1>
+</div>
+
+<div style="text-align:center;">
+  <div style="float:left;width:49%;border:1px black solid;margin:0px 5px 0px 5px;">
+    <h2>Basic map</h2>
+    <%= ziya_map '/load_map_1', :map_type => :us, :id => "map_1", :size => '400x300' %>
+  </div>
+  <div style="width:49%;border:1px black solid;overflow:auto;margin:0px 5px 0px 0px;">
+    <h2>Drillable/Updatable map</h2>
+    <%= ziya_map '/load_map_2', :map_type => :us, :id => "map2", :size => '400x300' %>
+    <a id="link" href="/goes_nowhere">Refresh Map...</a>        
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  var flashProxy = new FlashProxy( 'map2', '/maps/js/JavaScriptFlashGateway.swf' );    
+  $( function() {
+    $('a').click( function( event ) {
+      flashProxy.call( 'refreshData', '/refresh_map_2' );
+      event.preventDefault();      
+    });    
+  });
+</script>
