@@ -54,7 +54,10 @@ like applications. Your manager will love you for it !!
 
 == REQUIREMENTS:
 
-  ZiYa depends on the logging gem version ~> 0.9.0
+  ZiYa depends on the following gems
+  
+  * logging gem version ~> 0.9.0
+  * color gem version ~> 1.4.0
   
   ZiYa comes pre-bundled with the following packages:
   * XML/SWF charts Version 5.07 (http://www.maani.us/xml_charts/index.php)
@@ -88,12 +91,7 @@ like applications. Your manager will love you for it !!
   > ziyafy --help 
     
   To see all available options.
-            
-  NOTE: ZiYa gem depends on the following gems:
-  
-  * logging version 0.9.3 
-  * color   version 1.4.0
-  
+              
 == SYNOPSIS:
   
   This gem version requires a client update to flash 9.0 and possibly you will
@@ -158,13 +156,87 @@ like applications. Your manager will love you for it !!
       
        map.load_chart '/blee/load_chart', :controller => 'blee', :action => 'load_chart'
    
-== Creating a gauge
+== Styling a chart
+
+=== Basic Theme
+   
+   1 - Create a directory fred in public/charts/themes
+   2 - Create a file called column_chart.yml under the fred directory
+   2 - Edit column_chart.yml and add the following lines mind the yaml 2 space indentation!
+   
+   <%= chart :column %>
+     <%=comp :axis_category %>
+       color: ff0000
+       
+   3 - In fred_controller add the following directive to the chart to associate your new theme with the chart
+   
+   chart.add( :theme, 'fred' )
+   
+   4 - reload the page and you should now see the red x axis label
+   
+=== Cascading themes
+   
+   To override the default column chart theme, you may now create an instance theme. 
+   
+   1 - Create fred.yml in public/chart/themes/fred
+   
+   2 - Edit fred.yml as follows
+
+   <%= chart :column %>
+     <%=comp :axis_category %>
+       color: 00ff00
+   
+   3 - Edit your controller to indicate the instance theme name
+   
+   chart = Ziya::Charts.Column.new( nil, 'fred' )
+   
+   4 - Reload the page - The x axis category labels should now be green.
+   
+   NOTE: There are lots of setup example for themes in the ziya-galeria app at 
+   git://github.com/derailed/ziya-galeria.git. 
+   The themes component follows the xml/swf xml settings for configuration which 
+   are documented here http://www.maani.us/xml_charts/index.php?menu=Reference
+   
+=== Using theme helpers
+
+   Just like rails view template helpers, ZiYa support helpers for theme stylesheets.
+   In order to use a helper for your chart you will need to use the following steps:
+   
+   1 - Create a ziya directory under app/helpers
+   2 - Create a file called fred_helper.rb
+   3 - Edit fred_helper.rb and add the following lines
+   
+   module Ziya::FredHelper
+     def random_color
+       %w[ffaa00 aaff00 aabbff][rand(3)]
+     end
+   end
+   
+   4 - Edit you theme stylesheet to call the helper method
+   
+   In fred.yml
+   
+   <%= chart :column %>
+     <%=comp :axis_category %>
+       color: <%= random_color %>
+          
+   5 - Edit you config/initializer/ziya.rb and add the following line
+   
+      # Initializes the ZiYa Framework
+      Ziya.initialize( :logger => RAILS_DEFAULT_LOGGER,
+        :helpers_dir    => File.join( File.dirname(__FILE__), %w[.. .. app helpers ziya] ), # <-- New line !!
+        :themes_dir     => File.join( File.dirname(__FILE__), %w[.. .. public charts themes]) 
+      )
+   
+   6 - Restart your app server
+   7 - Reload the page serveral time and watch the x axis label color change
+   
+== Creating a gauge for a rails application
 
   You will need to modify the ziya initializer and add the following directive
   
     Ziya.initialize( 
       :logger      => RAILS_DEFAULT_LOGGER,
-      :helpers_dir => File.join( File.dirname(__FILE__), %w[.. .. app helpers ziya] ),
       :designs_dir => File.join( File.dirname(__FILE__), %w[.. .. public gauges designs] ), # => Add this !!
       :themes_dir  => File.join( File.dirname(__FILE__), %w[.. .. public charts themes]) )  
                  
