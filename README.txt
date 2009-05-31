@@ -76,37 +76,39 @@ like applications. Your manager will love you for it !!
   
 == INSTALL:
   
-  sudo gem install derailed-ziya ( preferred )
+  sudo gem install derailed-ziya
   
   cd to your application directory and issue the following command
   
-  > ziyafy
+  > ziyafy --charts
   
   This will copy the necessary themes and flash files to run ZiYa in your application 
-  public/charts directory.
+  public/charts directory. You can install maps and gauges components as well. Type in
   
-  > ziyafy --help - for all available options.
-      
+  > ziyafy --help 
+    
+  To see all available options.
+            
+  NOTE: ZiYa gem depends on the following gems:
+  
+  * logging version 0.9.3 
+  * color   version 1.4.0
+  
 == SYNOPSIS:
   
   This gem version requires a client update to flash 9.0 and possibly you will
   need to get a new license from XML/SWF >= 5.0, if you want to use
   advanced features suck as links and live updates.
   
-== Creating a ZiYa chart in a rails application
+== Creating a ZiYa chart in a Rails 2.3 application
   
-  1 - Edit your environment.rb and add
-
-    environment.rb
-      
-    config.gem 'derailed-ziya', '~> 2.1.0
-  
-  2 - Create a ziya.rb file under config/initializers
+  1 - Create a ziya.rb file under config/initializers
 
       ziya.rb:
 
         # Pull in the ZiYa gem framework
-        require 'derailed-ziya'
+        gem 'derailed-ziya', '= 2.1.0'
+        require 'ziya'
 
         # Initializes the ZiYa Framework
         Ziya.initialize( 
@@ -118,13 +120,14 @@ like applications. Your manager will love you for it !!
        or specify a file ie File.join( File.dirname(__FILE__), %w[.. log ziya.log]. If you choose to use the 
        ZiYa logger, you can specify the :log_level option to either :warn :info :debug or :error.
        You will need to specify your themes directory typically located under public/charts/themes or any location
-       you'll choose.
+       you'll like to choose.
       
    3 - Create a chart controller
    
       blee_controller.rb:
    
        class BleeController < ApplicationController
+        # Load ZiYa necessary helpers
         helper Ziya::HtmlHelpers::Charts
         helper Ziya::YamlHelpers::Charts
        
