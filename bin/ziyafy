@@ -12,6 +12,7 @@ module Ziya
     def initialize( argv=ARGV ) 
       option_parser = default_option_parser 
       option_parser.parse!(argv)
+      puts 'You must specify at least one off --charts, --gauges or --maps' unless options.charts or options.gauges or options.maps
       copy_artifacts
     end                  
           
@@ -21,28 +22,28 @@ module Ziya
         if options.send( s ) 
           dest_dir = File.join( options.public_dir )
           src_dir  = File.expand_path( File.join( File.dirname(__FILE__), %w[.. resources], s ) )
-          puts "Installing ZiYa artifacts in `#{dest_dir}"        
-          FileUtils.cp_r( src_dir, dest_dir )
+          puts "Installing ZiYa `#{s} artifacts in `#{dest_dir}"        
+          ::FileUtils.cp_r( src_dir, dest_dir )
          end
       end          
     end
     
     # access the options
     def options  #:nodoc:
-      if not @options then      
+      unless @options
         @options = OpenStruct.new 
         # Unless specified copy artifacts to the public directory
-        @options.public_dir = File.join( Dir.pwd, %w[public] )
+        @options.public_dir = ::File.join( Dir.pwd, %w[public] )
         @options.charts     = false
         @options.gauges     = false
         @options.maps       = false
       end
-      return @options
+      @options
     end
 
     # sets up cmd line args
     def default_option_parser #:nodoc:
-      OptionParser.new do |op|
+      ::OptionParser.new do |op|
         op.separator ""
         op.separator "ziyafy options:"
 
