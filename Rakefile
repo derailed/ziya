@@ -41,5 +41,5 @@ end
 
 task 'gem:package' => 'manifest:assert'
 
-depend_on "logging", '~> 0.9.3'
+depend_on "logging"
 depend_on "color"  , '~> 1.4.0'
