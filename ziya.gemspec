@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 
+
 Gem::Specification.new do |s|
   s.name = %q{ziya}
   s.version = "2.1.2"
