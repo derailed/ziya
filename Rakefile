@@ -30,7 +30,7 @@ PROJ.tests          = FileList['test/**/test_*.rb']
 PROJ.annotation_tags << 'BOZO'
 
 desc "Clean up artifact directories"
-task :clean do    
+task :clean do
   rcov_artifacts = File.join( File.dirname( __FILE__ ), "coverage" )
   FileUtils.rm_rf rcov_artifacts if File.exists? rcov_artifacts
   rdoc_artifacts = File.join( File.dirname( __FILE__ ), "docs" )

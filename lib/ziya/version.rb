@@ -2,7 +2,7 @@ module Ziya
   module Version
     MAJOR = 2
     MINOR = 1
-    TINY  = 2
+    TINY  = 3
     
     # Returns the version string for the library.
     def self.version
