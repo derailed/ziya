@@ -29,7 +29,9 @@
         - Changed add( :composites, ... ) call to take in a hash of hash instead of id/url pair.
           So the correct call is now of the form chart.add( :composites, :id => { :url => ... } )
           You can now add extra attributes that will be passed to the generated image component.
-  
+  2.1.4 - Added support for xm/swf 5.0.8
+        - Removed dependency on logging gem version
+        
 == DESCRIPTION:
 
 ZiYa allows you to easily create interactive charts, gauges and maps for your web applications. ZiYa leverages
@@ -56,8 +58,8 @@ like applications. Your manager will love you for it !!
 
   ZiYa depends on the following gems
   
-  * logging gem version ~> 0.9.0
-  * color gem version ~> 1.4.0
+  * logging
+  * color
   
   ZiYa comes pre-bundled with the following packages:
   * XML/SWF charts Version 5.07 (http://www.maani.us/xml_charts/index.php)
@@ -79,7 +81,11 @@ like applications. Your manager will love you for it !!
   
 == INSTALL:
   
-  sudo gem install derailed-ziya
+  NOTE: You will need to add github as a gem source and thus will need gem version 1.3 or later
+  
+  > gem sources -a http://gems.github.com
+  
+  > sudo gem install derailed-ziya
   
   cd to your application directory and issue the following command
   
@@ -138,7 +144,7 @@ like applications. Your manager will love you for it !!
           chart.add( :series, "Dogs", [10,20,30] )
           chart.add( :series, "Cats", [5,15,25] )
           respond_to do |fmt|
-            fmt.xml => { render :xml => chart.to_xml }
+            fmt.xml { render :xml => chart.to_xml }
           end
        end
   

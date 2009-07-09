@@ -17,6 +17,7 @@ module Ziya::Charts::Support
                   :type, :bull_color, :bear_color,
                   :drag, :min_x, :min_y, :max_x, :max_y,
                   :trend_thickness, :trend_alpha, :line_alpha, :rotation_x,
-                  :rotation_y, :grid, :select, :empty_center
+                  :rotation_y, :grid, :select, :empty_center,
+                  :zero_line
   end
 end
