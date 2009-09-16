@@ -29,11 +29,6 @@ helpers do
   include Ziya::YamlHelpers::Maps    
 end
 
-# get '/blee' do
-#   puts "AJAX Request", request.xhr?
-# end
-
-
 # -----------------------------------------------------------------------------
 # Point of entry. Sets up the map and the map callback to get the map data
 get '/' do
@@ -56,10 +51,6 @@ get '/load_map_2' do
   map.add( :series, ConfidentialHerpesReport.us_propagation )
   content_type 'application/xml', :charset => 'utf-8'
   map.to_xml
-end
-
-get '/blee' do
-  puts "HERE!!!!"
 end
 
 # -----------------------------------------------------------------------------

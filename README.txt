@@ -31,7 +31,10 @@
           You can now add extra attributes that will be passed to the generated image component.
   2.1.4 - Added support for xm/swf 5.0.8
         - Removed dependency on logging gem version
-        
+  2.1.5 - Added ability to enhance draw and link components in subsequent stylesheets. The old
+          behavior was to simply override the whole component. Now you can keep enhancing these components
+          in higher level stylesheets.
+          
 == DESCRIPTION:
 
 ZiYa allows you to easily create interactive charts, gauges and maps for your web applications. ZiYa leverages

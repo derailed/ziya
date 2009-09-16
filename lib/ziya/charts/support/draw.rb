@@ -23,6 +23,14 @@ module Ziya::Charts::Support
     has_attribute :components
                          
     # -------------------------------------------------------------------------
+    # Override merge attributes enhance component definitions vs override
+    def merge( parent_attributes, override=false )
+      comps = send( :components ) || []
+      comps = comps + parent_attributes.send( :components ) if parent_attributes.send( :components )
+      send( "components=", comps )      
+    end
+                         
+    # -------------------------------------------------------------------------
     # Dump has_attribute into xml element
     def flatten( xml, composite_urls=nil )
       if components or composite_urls

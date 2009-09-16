@@ -17,6 +17,14 @@ module Ziya::Charts::Support
     has_attribute :areas
                      
     # -------------------------------------------------------------------------
+    # Override merge attributes enhance component definitions vs override
+    def merge( parent_attributes, override=false )
+      comps = send( :areas ) || []
+      comps = comps + parent_attributes.send( :areas ) if parent_attributes.send( :areas )
+      send( "areas=", comps )
+    end
+                     
+    # -------------------------------------------------------------------------
     # Dump has_attribute into xml element
     def flatten( xml )
       if areas

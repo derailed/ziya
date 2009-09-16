@@ -304,6 +304,7 @@ module Ziya::Charts
         categories.each do |category|
           case
             when category.nil?                 : @xml.null
+            when category.instance_of?(Symbol) : @xml.string( category.to_s )
             when category.instance_of?(String) : @xml.string( category )
             when category.respond_to?(:zero?)  : @xml.number( category )
             when category.is_a?(Hash)          : categ = category.clone;gen_row_data( categ.delete( :value ), categ, @xml )

@@ -34,7 +34,7 @@ module Ziya::HtmlHelpers::Gauges
       :id             => "ziya_gauge",
       :swf_path       => gauge_path,
       :use_cache      => false,
-      :timeout        => false,
+      :timeout        => 30,
       :retry          => 2,
       :use_stage      => false }    
   end
@@ -51,7 +51,7 @@ module Ziya::HtmlHelpers::Gauges
   
     xml_swf_path = swf_path % [options[:swf_path], url]
     xml_swf_path << "&amp;timestamp=#{Time.now.to_i}" if options[:use_cache] == true
-    xml_swf_path << "&amp;timeout=#{options[:timeout]}&amp;retry=#{options[:retry]}" if options[:timeout] == true
+    xml_swf_path << "&amp;timeout=#{options[:timeout]}&amp;retry=#{options[:retry]}" if options[:timeout]
     xml_swf_path << "&amp;stage_width=#{options[:width]}&amp;stage_height=#{options[:height]}" if options[:use_stage] == true
     tags = <<-TAGS
       <object codebase="#{codebase}" classid="#{options[:class_id]}" id="#{options[:id]}" height="#{options[:height]}" width="#{options[:width]}">
