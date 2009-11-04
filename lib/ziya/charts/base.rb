@@ -321,6 +321,8 @@ module Ziya::Charts
         gen_string_data( value, opts, xml )
       elsif value.respond_to? :zero?
         gen_number_data( value, opts, xml )
+      else
+        xml.null
       end        
     end
     

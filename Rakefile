@@ -39,7 +39,7 @@ task :clean do
   FileUtils.rm_rf gem_artifacts if File.exists? gem_artifacts    
 end  
 
-task 'gem:package' => 'manifest:assert'
+task 'gem:package'
 
 depend_on "logging"
 depend_on "color"  , '~> 1.4.0'

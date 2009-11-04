@@ -34,6 +34,7 @@
   2.1.5 - Added ability to enhance draw and link components in subsequent stylesheets. The old
           behavior was to simply override the whole component. Now you can keep enhancing these components
           in higher level stylesheets.
+  2.1.6 - Fix issue with nil value in series being ignored where using the { :value => nil } form.
           
 == DESCRIPTION:
 
