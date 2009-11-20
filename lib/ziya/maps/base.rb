@@ -233,14 +233,14 @@ module Ziya::Maps
     # inflate object state based on object hierarchy
     def setup_state( state )
       override = self.class.name == state.class.name
-      Base.components.each do |comp| 
+      Base.components.each do |comp|
         instance_eval "#{comp}.merge( state.#{comp}, override ) unless state.#{comp}.nil?" 
       end
     end    
             
     # load yaml file associated with class if any
     def inflate( clazz, theme, instance=nil )
-      class_name  = clazz.to_s.gsub( /Ziya::Maps/, '' ).underscore.gsub( /\//, '' )      
+      class_name  = clazz.to_s.gsub( /Ziya::Maps/, '' ).ziya_underscore.gsub( /\//, '' )      
       class_name += '_map' unless class_name.match( /.?_map$/ ) 
       begin
         file_name = "#{theme}/#{class_name}"
@@ -402,7 +402,7 @@ module Ziya::Maps
       # Setup instance vars
       Base.components.each do |comp|
         instance_var = lambda { |v| self.instance_eval{ instance_variable_set "@#{comp}", v } }
-        instance_var.call(Ziya::Maps::Support.const_get( comp.to_s.classify ).new)
+        instance_var.call(Ziya::Maps::Support.const_get( comp.to_s.ziya_classify ).new)
       end      
     end       
   end

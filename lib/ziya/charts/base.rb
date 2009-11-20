@@ -272,7 +272,7 @@ module Ziya::Charts
             
     # load yaml file associated with class if any
     def inflate( clazz, theme, instance=nil )
-      class_name  = clazz.to_s.gsub( /Ziya::Charts/, '' ).underscore.gsub( /\//, '' )
+      class_name  = clazz.to_s.gsub( /Ziya::Charts/, '' ).ziya_underscore.gsub( /\//, '' )
       class_name += '_chart' unless class_name.match( /.?_chart$/ ) 
       begin
         file_name = "#{theme}/#{class_name}"
@@ -457,7 +457,7 @@ module Ziya::Charts
       # Setup instance vars
       Base.components.each do |comp|
         instance_var = lambda { |v| self.instance_eval{ instance_variable_set "@#{comp}", v } }
-        instance_var.call(Ziya::Charts::Support.const_get( comp.to_s.classify ).new)
+        instance_var.call(Ziya::Charts::Support.const_get( comp.to_s.ziya_classify ).new)
       end      
     end       
   end

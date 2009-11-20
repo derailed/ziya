@@ -35,6 +35,7 @@
           behavior was to simply override the whole component. Now you can keep enhancing these components
           in higher level stylesheets.
   2.1.6 - Fix issue with nil value in series being ignored where using the { :value => nil } form.
+  2.1.7 - Fix possible naming conflict with String extension class
           
 == DESCRIPTION:
 

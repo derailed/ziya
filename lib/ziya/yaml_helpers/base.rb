@@ -12,7 +12,7 @@ module Ziya
       def clazz( class_name, module_name=nil ) #:nodoc:
         buff = "!ruby/object:Ziya::"
         buff << "#{module_name}::" unless module_name.nil?
-        buff << class_name.to_s.camelize_it
+        buff << class_name.to_s.ziya_camelize
         buff
       end      
     end

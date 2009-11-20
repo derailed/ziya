@@ -153,7 +153,7 @@ module Ziya::Gauges
       # -----------------------------------------------------------------------
       # Load yaml file associated with class if any
       def inflate( clazz, designs_dir, design )
-        class_name  = clazz.to_s.demodulize.underscore
+        class_name  = clazz.to_s.ziya_demodulize.ziya_underscore
         begin
           file_name = "#{designs_dir}/#{design}.yml"
           Ziya.logger.debug ">>> ZiYa attempt to load design file '#{file_name}"    

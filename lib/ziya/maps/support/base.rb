@@ -16,7 +16,7 @@ module Ziya::Maps::Support
     def to_comp_yaml( indent_multiplier=1 )
       buff = []
       tab  = indent( indent_multiplier )
-      buff << "#{dial( self.class.name.demodulize, name )}"      
+      buff << "#{dial( self.class.name.ziya_demodulize, name )}"      
       options.each_pair do |k,v|
         buff << "#{tab}#{k}: #{v}" if options[k] and !options[k].to_s.empty?
       end
@@ -27,7 +27,7 @@ module Ziya::Maps::Support
 
       # converts class name to underscore name    
       def to_component_id
-        class_name = self.class.name.underscore.split( "/" ).last
+        class_name = self.class.name.ziya_underscore.split( "/" ).last
       end
 
   end

@@ -64,7 +64,7 @@ module Ziya::Charts::Support
     # Flattens out this component to xml
     def flatten( xml )
       hash = has_sub_components
-      pref = self.class.name.demodulize.underscore
+      pref = self.class.name.ziya_demodulize.ziya_underscore
       if hash and ! hash.empty?     
         self.class.module_eval <<-XML
          xml.#{pref}( #{options_as_string} ) do

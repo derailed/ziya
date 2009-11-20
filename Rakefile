@@ -41,5 +41,5 @@ end
 
 task 'gem:package'
 
-depend_on "logging"
-depend_on "color"  , '~> 1.4.0'
+depend_on "logging", '>= 0.9.0'
+depend_on "color"  , '>= 1.4.0'
