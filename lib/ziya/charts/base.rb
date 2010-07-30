@@ -217,7 +217,7 @@ module Ziya::Charts
           @options[directive] = styles   
         when :chart_types
           types = args.first.is_a?(Array) ? args.shift : []
-          raise ArgumentError, "Must specify a set of chart types" if types.to_s.empty?          
+          raise ArgumentError, "Must specify a set of chart types" if types.empty?
           @options[directive] = types                        
         when :theme
           theme = args.first.is_a?(String) ? args.shift : ""
@@ -237,7 +237,8 @@ module Ziya::Charts
     #                      link update where you may not need to redraw the whole chart.
     def to_s( options={} )
       @partial = options[:partial] || false
-      @xml     = Builder::XmlMarkup.new
+      out     = ""
+      @xml = Builder::XmlMarkup.new( :target => out )
       # Forces utf8 encoding on xml stream
       @xml.instruct! :xml, :version => "1.0", :encoding => "UTF-8"
       @xml.chart do
@@ -255,6 +256,7 @@ module Ziya::Charts
         setup_series
       end
       @xml.to_s.gsub( /<to_s\/>/, '' )
+      out
     end                                       
     # dumps the chart design to xml for client side consumption
     alias to_xml to_s  
@@ -303,12 +305,18 @@ module Ziya::Charts
       @xml.row do
         categories.each do |category|
           case
-            when category.nil?                 : @xml.null
-            when category.instance_of?(Symbol) : @xml.string( category.to_s )
-            when category.instance_of?(String) : @xml.string( category )
-            when category.respond_to?(:zero?)  : @xml.number( category )
-            when category.is_a?(Hash)          : categ = category.clone;gen_row_data( categ.delete( :value ), categ, @xml )
-            else puts "No match"
+            when category.nil?
+              @xml.null
+            when category.instance_of?(Symbol)
+              @xml.string( category.to_s )
+            when category.instance_of?(String)
+              @xml.string( category )
+            when category.respond_to?(:zero?) 
+              @xml.number( category )
+            when category.is_a?(Hash)
+              categ = category.clone;gen_row_data( categ.delete( :value ), categ, @xml )
+            else 
+              puts "No match"
           end
         end
       end
@@ -339,7 +347,7 @@ module Ziya::Charts
     # generates chart data points    
     # BOZO !! Check args on hash
     def gen_chart_data( series )
-      block = lambda {
+      block = proc {
         series[:points].each do |row|      
           if !row
             @xml.null 

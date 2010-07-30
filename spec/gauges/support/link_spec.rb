@@ -13,9 +13,9 @@ describe Ziya::Gauges::Support::Link do
   
   describe "#flatten" do  
     it "should flatten component correctly" do
-      xml = Builder::XmlMarkup.new
+      buff = ''
+      xml = Builder::XmlMarkup.new( :target => buff )
       @comp.flatten( xml )
-      buff = xml.to_s  
       buff.scan( /<area/ ).size.should == 2
       buff.scan( /x=\"(.*?\d+)\"/ ).should      == [ ["10"], ["20"] ]
       buff.scan( /y=\"(.*?\d+)\"/ ).should      == [ ["20"], ["30"] ]

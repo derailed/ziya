@@ -6,7 +6,7 @@ module Ziya::Maps::Support
 
     # flatten component to xml
     def flatten( xml )
-      xml.state( :id => to_component_id ) do |b|
+      xml.state( :id => to_component_id ) do |state|
         options.keys.sort { |a,b| a.to_s <=> b.to_s }.each{ |k| self.class.module_eval "xml.#{k}( '#{options[k]}' )" }
       end
     end

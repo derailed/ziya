@@ -134,13 +134,15 @@ module Ziya::Gauges
       # -----------------------------------------------------------------------
       # renders chart to xml
       def render_xml
-        @xml = Builder::XmlMarkup.new
+        out = ''
+        @xml = Builder::XmlMarkup.new( :target => out )
         @xml.gauge do
           @xml.license( @license ) unless @license.nil?
           render_extra_components          
           render_components
         end
-        @xml.to_s.gsub( /<to_s\/>/, '' )        
+        @xml.to_s.gsub( /<to_s\/>/, '' )
+        out
       end
 
       # -----------------------------------------------------------------------

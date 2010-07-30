@@ -23,7 +23,7 @@ describe Ziya::Charts::Support::ChartPref do
     it "should flatten line connect correctly" do
       @comp.connect = true
       @comp.point_shape = 'square'
-      @comp.flatten( @xml ).should == '<chart_pref point_shape="square" connect="true"/>'
+      @comp.flatten( @xml ).should == '<chart_pref connect="true" point_shape="square"/>'
     end
 
     it "should flatten zero line correctly" do

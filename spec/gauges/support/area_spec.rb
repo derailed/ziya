@@ -19,10 +19,10 @@ describe Ziya::Gauges::Support::Area do
   end
   
   describe "#flatten" do  
-    it "should flatten component correctly" do
-      xml = Builder::XmlMarkup.new
-      @comp.flatten( xml )
-      buff = xml.to_s  
+    it "flattens component correctly" do
+      buff = ""
+      xml = Builder::XmlMarkup.new( :target => buff )
+      @comp.flatten( xml )       
       @comp.class.attributes[@comp.class.name].each do |attr|
         buff.scan( /#{attr}=\"(\w+)\"/ ).should == [ [@comp.send( attr ).to_s] ] unless attr == :background_color
       end
@@ -30,7 +30,7 @@ describe Ziya::Gauges::Support::Area do
   end
   
   describe "YAML load" do
-    it "should load from yaml correctly" do
+    it "loads from yaml correctly" do
       comp = YAML.load( @comp.to_yaml )
       @comp.options.each_pair do |k,v|
         comp.send( k ).to_s.should == v.to_s

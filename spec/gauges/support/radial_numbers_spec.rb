@@ -21,15 +21,14 @@ describe Ziya::Gauges::Support::RadialNumbers do
   end
   
   describe "#flatten" do  
-    it "should flatten component correctly" do
-      xml = Builder::XmlMarkup.new
+    it "flattens component correctly" do
+      buff = ''
+      xml = Builder::XmlMarkup.new( :target => buff )
       @comp.flatten( xml )
-      buff = xml.to_s   
       buff.scan( /<text/ ).size.should == 10
       buff.scan( /x=\"(.*?\d+)\"/ ).should == [ ["10"], ["78"], ["138"], ["183"], ["206"], ["206"], ["183"], ["138"], ["78"], ["10"] ]
       buff.scan( /y=\"(.*?\d+)\"/ ).should == [ ["-190"], ["-177"], ["-143"], ["-90"], ["-24"], ["44"], ["109"], ["163"], ["197"], ["210"] ]
       buff.scan( />(\d+)<\/text>/ ).should == [ ["1"], ["2"], ["3"], ["4"], ["5"], ["6"], ["7"], ["8"], ["9"], ["10"] ]
-    end
-        
+    end        
   end
 end

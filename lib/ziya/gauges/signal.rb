@@ -79,7 +79,7 @@ module Ziya::Gauges
           count += 1
         end
         buff.join( "\n" )
-    	end
+      end
 
       # -----------------------------------------------------------------------
       # draws signal change indicator
@@ -122,9 +122,9 @@ module Ziya::Gauges
       def calc_change_alpha( change )
         alphas = []
         indexes = case change.abs
-          when 0..1   : change >= 0 ? [2] : [3]
-          when 1..5   : change >= 0 ? [1, 2] : [3,4]
-          when 5...10 : change >= 0 ? [0, 1, 2] : [3,4,5]
+          when 0..1   then change >= 0 ? [2] : [3]
+          when 1..5   then change >= 0 ? [1, 2] : [3,4]
+          when 5...10 then change >= 0 ? [0, 1, 2] : [3,4,5]
         end
         6.times { |i| alphas[i] = indexes.include?(i) ? 100 : 10 }
         alphas

@@ -16,7 +16,7 @@ module Ziya::Maps::Support
     define_mappings :level => :data
     
     def flatten( xml )
-      xml.state( :id => to_component_id ) do |b|
+      xml.state( :id => to_component_id ) do
         options.keys.sort { |a,b| a.to_s <=> b.to_s }.each { |k| self.class.module_eval "xml.#{find_key_for_attr(k)}( '#{options[k]}' )" }
       end
     end

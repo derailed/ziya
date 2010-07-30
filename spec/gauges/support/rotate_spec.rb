@@ -22,9 +22,9 @@ describe Ziya::Gauges::Support::Rotate do
   
   describe "#flatten" do  
     it "should flatten component correctly" do
-      xml = Builder::XmlMarkup.new
+      buff = ''
+      xml = Builder::XmlMarkup.new( :target => buff )
       @comp.flatten( xml )
-      buff = xml.to_s  
       @comp.class.attributes[@comp.class.name].each do |attr|
         buff.scan( /\s#{attr}=\"(\w+)\"/ ).should == [ [@comp.send( attr ).to_s] ] unless attr == :components
       end

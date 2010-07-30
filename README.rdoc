@@ -2,41 +2,6 @@
     by Fernand Galiana
     git://github.com/derailed/ziya.git
 
-== RELEASES
-
-  2.0.0 - Added support for XML/SWF 5.02
-  2.0.1 - Additional support for 5.02 + Added donut chart from 5.03
-  2.0.2 - Changed logging required to 0.9.X - Update to xml/swf 5.0.4
-  2.0.3 - README file update - Thanks to Paul James !
-  2.0.4 - Fixed missing encoding on composite urls - published gem on github
-  2.0.5 - Fixed merb app support issue
-  2.0.6 - Updates to support xml/swf 5.0.5
-  2.0.7 - Updates to support xm/swf 5.0.7
-          - added parameters for the ziya_js helpers ( Tx Brian ! )
-          - added draw button support
-          - added chart_note to annotate a chart
-          - added tooltip chart support
-  2.0.8 - Patches to xml/swf/5.0.7 - scroller handle fixe + Stoppped_Scolling js callback 
-          - added support for flash_to_javascript callbacks
-          - added support ids in composite charts
-          - various bug fixes 
-  2.1.0 - Refactor some of the underlying ziya code
-          - Beef up test suite
-          - changed component tree
-        - Added geographical maps support
-        - Changed the default ziyafy to install charts only by default
-          Run ziyafy --help for the various options
-        - Changed add( :composites, ... ) call to take in a hash of hash instead of id/url pair.
-          So the correct call is now of the form chart.add( :composites, :id => { :url => ... } )
-          You can now add extra attributes that will be passed to the generated image component.
-  2.1.4 - Added support for xm/swf 5.0.8
-        - Removed dependency on logging gem version
-  2.1.5 - Added ability to enhance draw and link components in subsequent stylesheets. The old
-          behavior was to simply override the whole component. Now you can keep enhancing these components
-          in higher level stylesheets.
-  2.1.6 - Fix issue with nil value in series being ignored where using the { :value => nil } form.
-  2.1.7 - Fix possible naming conflict with String extension class
-          
 == DESCRIPTION:
 
 ZiYa allows you to easily create interactive charts, gauges and maps for your web applications. ZiYa leverages
@@ -46,7 +11,7 @@ looking charts for your application. You will also be able to use the charts, ga
 by embedding various link in the graphical components thus bringing to the table an ideal scheme for reporting and dashboard
 like applications. Your manager will love you for it !!
 
-	Blog Site     : http://ziya.liquidrail.com
+	Sample site   : http://ziya.liquidrail.com
 	Documentation : http://ziya.liquidrail.com/docs
 	Forum         : http://groups.google.com/group/ziya-plugin
 	Repositories  : git://github.com/derailed/ziya.git
@@ -88,9 +53,9 @@ like applications. Your manager will love you for it !!
   
   NOTE: You will need to add github as a gem source and thus will need gem version 1.3 or later
   
-  > gem sources -a http://gems.github.com
+  > gem sources -a http://gemcutter.org
   
-  > sudo gem install derailed-ziya
+  > sudo gem install ziya
   
   cd to your application directory and issue the following command
   

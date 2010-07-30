@@ -16,9 +16,9 @@ describe Ziya::Gauges::Support::RadialTicks do
   
   describe "#flatten" do  
     it "should flatten component correctly" do
-      xml = Builder::XmlMarkup.new
+      buff = ''
+      xml = Builder::XmlMarkup.new( :target => buff )
       @comp.flatten( xml )
-      buff = xml.to_s   
       buff.scan( /<line/ ).size.should == 10
       buff.scan( /x1=\"(.*?\d+)\"/ ).should == [ ["1"], ["18"], ["35"], ["50"], ["65"], ["77"], ["87"], ["94"], ["99"], ["101"] ]
       buff.scan( /y1=\"(.*?\d+)\"/ ).should == [ ["-98"], ["-96"], ["-91"], ["-84"], ["-74"], ["-62"], ["-48"], ["-32"], ["-15"], ["1"] ]

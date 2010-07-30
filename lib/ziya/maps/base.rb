@@ -108,7 +108,7 @@ module Ziya::Maps
         if defined?(RAILS_ROOT) 
           require_dependency File.join(helper_dir, $1) 
         else
-          require File.join(helper_dir, $1)
+          require File.expand_path( File.join(helper_dir, $1) )
         end
         helper_module_name = "Ziya::" + $1.gsub(/(^|_)(.)/) { $2.upcase }        
         # helper_module_name = $1.to_s.gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(^|_)(.)/) { $2.upcase }
@@ -208,7 +208,8 @@ module Ziya::Maps
                 
     # spews the map specification to a string
     def to_s
-      @xml = Builder::XmlMarkup.new
+      out = ''
+      @xml = Builder::XmlMarkup.new( :target => out )
       # Forces utf8 encoding on xml stream
       @xml.instruct! :xml, :version => "1.0", :encoding => "UTF-8"    
       if map_type == :us
@@ -223,6 +224,7 @@ module Ziya::Maps
         end         
       end
       @xml.to_s.gsub( /<to_s\/>/, '' )
+      out
     end                                       
     # dumps the map design to xml for client side consumption
     alias to_xml to_s  

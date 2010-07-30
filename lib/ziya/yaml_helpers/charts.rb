@@ -43,7 +43,7 @@ module Ziya
       #  => --- !ruby/object:Ziya::Charts::Bar
       def chart( class_name )
         "--- #{clazz( class_name, :Charts )}" 
-       end
+      end
     end
   end
 end
