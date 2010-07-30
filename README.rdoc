@@ -50,12 +50,8 @@ like applications. Your manager will love you for it !!
     for a reasonable price.
   
 == INSTALL:
-  
-  NOTE: You will need to add github as a gem source and thus will need gem version 1.3 or later
-  
-  > gem sources -a http://gemcutter.org
-  
-  > sudo gem install ziya
+      
+  > gem install ziya
   
   cd to your application directory and issue the following command
   
@@ -80,7 +76,7 @@ like applications. Your manager will love you for it !!
 
       ziya.rb:
 
-        # Pull in the ZiYa gem framework
+        # Pull in the ZiYa gem framework 
         gem 'derailed-ziya', '= 2.1.0'
         require 'ziya'
 
@@ -101,9 +97,7 @@ like applications. Your manager will love you for it !!
       blee_controller.rb:
    
        class BleeController < ApplicationController
-        # Load ZiYa necessary helpers
-        helper Ziya::HtmlHelpers::Charts
-        helper Ziya::YamlHelpers::Charts
+        helper Ziya::HtmlHelpers::Charts, Ziya::YamlHelpers::Charts
        
         # Callback from the flash movie to get the chart's data
         def load_chart
