@@ -16,4 +16,10 @@ Bones {
   gem.executables %w[ziyafy]
   spec_opts       %w[--color]
   ruby_opts       %w[-W0]
+  
+  depends_on "logging"
+  depends_on "color"
+  depends_on "bones"       , :development => true
+  depends_on "bones-git"   , :development => true
+  depends_on "bones-extras", :development => true
 }
