@@ -31,4 +31,6 @@
 2.1.6 - Fix issue with nil value in series being ignored where using the { :value => nil } form.
 2.1.7 - Fix possible naming conflict with String extension class
 2.1.8 - Added support for ruby 1.9 and bundler ( Thanks Roland Venesz and Todd Sedano for the contributions! )
+2.1.9 - Various bug fixes and clean ups
+2.3.0 - Moving to Rails3
           

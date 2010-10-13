@@ -46,8 +46,8 @@ module Ziya::HtmlHelpers::Gauges
     # setup width and height
     setup_movie_size( options )
     
-    color_param  = tag( 'param', {:name => 'bgcolor', :value => options[:bgcolor]}, true )
-    color_param += tag( 'param', {:name  => "wmode", :value => options[:wmode]}, true )
+    color_param  = ziya_tag( 'param', {:name => 'bgcolor', :value => options[:bgcolor]}, true )
+    color_param += ziya_tag( 'param', {:name  => "wmode", :value => options[:wmode]}, true )
   
     xml_swf_path = swf_path % [options[:swf_path], url]
     xml_swf_path << "&amp;timestamp=#{Time.now.to_i}" if options[:use_cache] == true

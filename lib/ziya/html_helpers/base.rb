@@ -32,8 +32,8 @@ module Ziya
         url ? CGI.escape( url.gsub( /&amp;/, '&' ) ) : url
       end
    
-      # # All this stolen form rails to make Ziya work with other fmks....    
-      def tag(name, options = nil, open = false, escape = true)
+      # All this stolen form rails to make Ziya work with other fmks....    
+      def ziya_tag(name, options = nil, open = false, escape = true)
        "<#{name}#{tag_options(options, escape) if options}" + (open ? ">" : " />")
       end    
         
@@ -57,32 +57,7 @@ module Ziya
           " #{attrs.sort * ' '}" unless attrs.empty?
         end
       end
-      #   
-      # def content_tag(name, content_or_options_with_block = nil, options = nil, escape = true, &block)
-      #   if block_given?
-      #     options = content_or_options_with_block if content_or_options_with_block.is_a?(Hash)
-      #     content = capture_block(&block)
-      #     content_tag = content_tag_string(name, content, options, escape)
-      #     block_is_within_action_view?(block) ? concat(content_tag, block.binding) : content_tag
-      #   else
-      #     content = content_or_options_with_block
-      #     content_tag_string(name, content, options, escape)
-      #   end
-      # end
-      #   
-      # def capture_block( *args, &block )
-      #     block.call(*args)
-      # end
-      #   
-      # def content_tag_string(name, content, options, escape = true)
-      #   tag_options = tag_options(options, escape) if options
-      #   "<#{name}#{tag_options}>#{content}</#{name}>"
-      # end
-      # 
-      # def block_is_within_action_view?(block)
-      #   eval("defined? _erbout", block.binding)
-      # end  
-      #   
+
       def escape_chars 
         { '&' => '&amp;', '"' => '&quot;', '>' => '&gt;', '<' => '&lt;' }
       end          

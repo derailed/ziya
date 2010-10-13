@@ -30,6 +30,7 @@ like applications. Your manager will love you for it !!
   
   * logging
   * color
+  * builder
   
   ZiYa comes pre-bundled with the following packages:
   * XML/SWF charts Version 5.07 (http://www.maani.us/xml_charts/index.php)
@@ -66,10 +67,74 @@ like applications. Your manager will love you for it !!
               
 == SYNOPSIS:
   
-  This gem version requires a client update to flash 9.0 and possibly you will
+  This gem version requires a client update to flash 10.0 and possibly you will
   need to get a new license from XML/SWF >= 5.0, if you want to use
   advanced features suck as links and live updates.
   
+== Creating a ZiYa chart in a Rails 3.0 application  
+
+  1 - Edit your Gemfile and add the followings:
+      gem 'ziya', '2.3.0'
+      gem 'color'
+      gem 'logging'
+      gem 'builder'
+      
+  2 - Create a ziya.rb file under config/initializers
+
+      ziya.rb:
+
+        require 'ziya'
+
+        # Initializes the ZiYa Framework
+        Ziya.initialize( 
+          :logger     => RAILS_DEFAULT_LOGGER,
+          :themes_dir => File.join( File.dirname(__FILE__), %w[.. .. public charts themes]) 
+        )
+
+       This will initialize the gem. You can log the output to stdout using the ZiYa bundled logger
+       or specify a file ie File.join( File.dirname(__FILE__), %w[.. log ziya.log]. If you choose to use the 
+       ZiYa logger, you can specify the :log_level option to either :warn :info :debug or :error.
+       You will need to specify your themes directory typically located under public/charts/themes or any location
+       you'll like to choose.
+      
+   3 - Create a chart controller
+   
+      blee_controller.rb:
+   
+       class BleeController < ApplicationController
+        helper Ziya::HtmlHelpers::Charts, Ziya::YamlHelpers::Charts
+       
+        # Callback from the flash movie to get the chart's data
+        def load_chart
+          # Create a bar chart with 2 series composed of 3 data points each.
+          # Chart will be rendered using the default look and feel
+          chart = Ziya::Charts::Bar.new
+          chart.add( :axis_category_text, %w[2006 2007 2008] )
+          chart.add( :series, "Dogs", [10,20,30] )
+          chart.add( :series, "Cats", [5,15,25] )
+          respond_to do |fmt|
+            fmt.xml { render :xml => chart.to_xml }
+          end
+        end
+      end
+  
+   4 - Create a view
+   
+      blee/index.html.erb:
+   
+        # Defines the necessary tag to embed a flash movie in your html page.
+        # This will callback to your controller to fetch the necessary xml.
+        <%= ziya_chart load_chart_url(:xml) -%>
+   
+      NOTE: You must now specify the xml format for correct rendering!
+      
+   5 - Create a named route
+   
+      config/routes.rb:
+      
+       match 'blee' => "blee#index"
+       match 'load_chart' => "blee#load_chart"
+
 == Creating a ZiYa chart in a Rails 2.3 application
   
   1 - Create a ziya.rb file under config/initializers
@@ -110,7 +175,8 @@ like applications. Your manager will love you for it !!
           respond_to do |fmt|
             fmt.xml { render :xml => chart.to_xml }
           end
-       end
+        end
+      end
   
    4 - Create a view
    

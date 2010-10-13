@@ -77,7 +77,7 @@ module Ziya::HtmlHelpers::Charts
         var hasRightVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
         if( hasRightVersion ) { 
           AC_FL_RunContent(
-            'codebase'         , 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0',
+            'codebase'         , 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,45,2',
             'width'            , '#{options[:width]}',
             'height'           , '#{options[:height]}',
             'scale'            , '#{options[:scale]}',
@@ -114,7 +114,9 @@ module Ziya::HtmlHelpers::Charts
     options = default_chart_options.merge( chart_options )
   
     flash_vars = url ? charts_swf : charts_swf_base
-    _ziya_chart( url, flash_vars, "charts.swf", options )
+    buff       = _ziya_chart( url, flash_vars, "charts.swf", options )
+         
+    (respond_to? :raw) ? raw( buff ) : buff     
   end   
         
   # genereates composite chart urls
@@ -139,7 +141,7 @@ module Ziya::HtmlHelpers::Charts
   def charts_swf()         "#{charts_swf_base}&xml_source=%s"; end      
   def chart_path()         "/charts"; end       
   def class_id()           "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" end
-  def codebase()           "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0"; end
+  def codebase()           "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,45,2"; end
 
   # generates swf path
   def gen_swf_path( path_directive, swf_dir, url )
@@ -154,8 +156,8 @@ module Ziya::HtmlHelpers::Charts
     # setup width and height
     setup_movie_size( options )
     
-    color_param  = tag( 'param', {:name => 'bgcolor', :value => options[:bgcolor]}, true )
-    color_param += tag( 'param', {:name  => "wmode", :value => options[:wmode]}, true )
+    color_param  = ziya_tag( 'param', {:name => 'bgcolor', :value => options[:bgcolor]}, true )
+    color_param += ziya_tag( 'param', {:name  => "wmode", :value => options[:wmode]}, true )
 
     xml_swf_path = gen_swf_path( swf_path, options[:swf_path], url )
     xml_swf_path << "&amp;timestamp=#{Time.now.to_i}" if options[:cache] == false
