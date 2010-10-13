@@ -87,7 +87,7 @@ like applications. Your manager will love you for it !!
 
         # Initializes the ZiYa Framework
         Ziya.initialize( 
-          :logger     => RAILS_DEFAULT_LOGGER,
+          :logger     => Rails.logger,
           :themes_dir => File.join( File.dirname(__FILE__), %w[.. .. public charts themes]) 
         )
 
@@ -132,7 +132,7 @@ like applications. Your manager will love you for it !!
    
       config/routes.rb:
       
-       match 'blee' => "blee#index"
+       match 'blee'       => "blee#index"
        match 'load_chart' => "blee#load_chart"
 
 == Creating a ZiYa chart in a Rails 2.3 application
